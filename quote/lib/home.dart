@@ -12,9 +12,10 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Home(),
+    return Scaffold(
+      body: Center(
+        child: Text('Helllloooooooo!!!'),
+      ),
     );
   }
 }
