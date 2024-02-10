@@ -131,7 +131,7 @@ class _Add_TodoState extends State<Add_Todo> {
         context: context,
         builder: (ctx) => AlertDialog(
           title: const Text('Invalid input'),
-          content: const Text('Please make sure to enter all fields'),
+          content: const Text('Please make sure to enter all the fields'),
           actions: [
             TextButton(
               onPressed: () {
