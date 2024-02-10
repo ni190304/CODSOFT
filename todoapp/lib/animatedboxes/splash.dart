@@ -1,0 +1,29 @@
+import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import '../auth/start.dart';
+
+class Splash extends StatelessWidget {
+  const Splash({Key? key});
+
+  @override
+  Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 6), () {
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return const Start();
+        },
+      ));
+    });
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: SizedBox(
+          height: 600,
+          width: 600,
+          child: Lottie.asset('lib/animations/todo3.json'),
+        ),
+      ),
+    );
+  }
+}
