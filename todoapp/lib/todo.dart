@@ -418,12 +418,12 @@ class _TodoState extends State<Todo> {
               unselectedItemColor: Colors.black,
               selectedFontSize: 14,
               unselectedFontSize: 15,
-              iconSize: 28,
+              iconSize: 27,
               items: [
                 BottomNavigationBarItem(
                   icon: Icon(
                     index == 0 ? Icons.home : Icons.home_outlined,
-                    size: index == 0 ? 32 : 28,
+                    size: index == 0 ? 32 : 27,
                     color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                   label: index == 0 ? 'Home' : '',
@@ -431,7 +431,7 @@ class _TodoState extends State<Todo> {
                 BottomNavigationBarItem(
                   icon: Icon(
                     index == 1 ? Icons.square : Icons.crop_square_outlined,
-                    size: index == 1 ? 32 : 28,
+                    size: index == 1 ? 32 : 27,
                     color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                   label: index == 1 ? 'Missing' : '',
@@ -439,7 +439,7 @@ class _TodoState extends State<Todo> {
                 BottomNavigationBarItem(
                   icon: Icon(
                     index == 2 ? Icons.check_box : Icons.check,
-                    size: index == 2 ? 32 : 28,
+                    size: index == 2 ? 32 : 27,
                     color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                   label: index == 2 ? 'Completed' : '',
@@ -447,7 +447,7 @@ class _TodoState extends State<Todo> {
                 BottomNavigationBarItem(
                   icon: Icon(
                     index == 3 ? Icons.star : Icons.star_border_outlined,
-                    size: index == 3 ? 32 : 28,
+                    size: index == 3 ? 32 : 27,
                     color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                   label: index == 3 ? 'Favorites' : '',
@@ -457,7 +457,7 @@ class _TodoState extends State<Todo> {
                     index == 4
                         ? Icons.account_circle
                         : Icons.account_circle_outlined,
-                    size: index == 4 ? 32 : 28,
+                    size: index == 4 ? 32 : 27,
                     color: Theme.of(context).colorScheme.onSecondaryContainer,
                   ),
                   label: index == 4 ? 'Profile' : '',

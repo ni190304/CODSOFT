@@ -321,12 +321,12 @@ class _QuoteState extends State<Quote> {
             unselectedItemColor: Colors.black,
             selectedFontSize: 14,
             unselectedFontSize: 15,
-            iconSize: 28,
+            iconSize: 27,
             items: [
               BottomNavigationBarItem(
                 icon: Icon(
                   index == 0 ? Icons.home : Icons.home_outlined,
-                  size: index == 0 ? 32 : 28,
+                  size: index == 0 ? 32 : 27,
                   color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
                 label: index == 0 ? 'Home' : '',
@@ -334,7 +334,7 @@ class _QuoteState extends State<Quote> {
               BottomNavigationBarItem(
                 icon: Icon(
                   index == 1 ? Icons.star : Icons.star_border_outlined,
-                  size: index == 1 ? 32 : 28,
+                  size: index == 1 ? 32 : 27,
                   color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
                 label: index == 1 ? 'Favorites' : '',
@@ -344,7 +344,7 @@ class _QuoteState extends State<Quote> {
                   index == 2
                       ? Icons.account_circle
                       : Icons.account_circle_outlined,
-                  size: index == 2 ? 32 : 28,
+                  size: index == 2 ? 32 : 27,
                   color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),
                 label: index == 2 ? 'Profile' : '',
