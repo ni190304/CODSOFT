@@ -33,7 +33,7 @@ class _StartState extends State<Start> {
           seedColor: const Color.fromARGB(159, 3, 25, 41),
         ),
       ),
-      title: 'Wealthwise',
+      title: 'TodoApp',
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, authSnapshot) {
