@@ -416,8 +416,8 @@ class _TodoState extends State<Todo> {
               currentIndex: index,
               selectedItemColor: const Color.fromARGB(255, 93, 27, 3),
               unselectedItemColor: Colors.black,
-              selectedFontSize: 14,
-              unselectedFontSize: 15,
+              selectedFontSize: 17,
+              unselectedFontSize: 14,
               iconSize: 27,
               items: [
                 BottomNavigationBarItem(
