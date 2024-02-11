@@ -45,6 +45,13 @@ dependencies:
   google_fonts: ^4.0.4
   another_flushbar: ^1.12.30
   html: ^0.15.4
+  screenshot: ^1.2.1
+  share_plus: ^7.2.2
+  image_gallery_saver: ^2.0.3
+  permission_handler: ^11.0.1
+  path_provider: ^2.1.1
+  shared_preferences: ^2.2.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:

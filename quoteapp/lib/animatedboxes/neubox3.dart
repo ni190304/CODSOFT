@@ -15,7 +15,7 @@ class Neubox3 extends StatelessWidget {
           child: child,
         ),
         height: 50,
-        width: 105,
+        width: 120,
         decoration: BoxDecoration(
             color: Colors.grey[100],
             borderRadius: BorderRadius.circular(12),

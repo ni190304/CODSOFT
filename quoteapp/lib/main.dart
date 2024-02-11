@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:quote/screens/home.dart';
 import 'firebase_options.dart';
 import 'start.dart';
 
@@ -15,5 +17,11 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-  runApp(const Start());
+  runApp(ChangeNotifierProvider(
+      create: (context) {
+        FavIndexNotifier taskIndexNotifier = FavIndexNotifier();
+        taskIndexNotifier.loadFavIndexFromPrefs(); // Load index from prefs
+        return taskIndexNotifier;
+      },
+      child: const Start()));
 }

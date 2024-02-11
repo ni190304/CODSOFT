@@ -11,7 +11,7 @@ class Neubox4 extends StatelessWidget {
       child: Center(
         child: child,
       ),
-      height: 485,
+      height: 450,
       width: 300,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,

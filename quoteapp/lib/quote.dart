@@ -32,7 +32,7 @@ class _QuoteState extends State<Quote> {
   final _screens = [
     ScrollConfiguration(behavior: NoGlowBehavior(), child: Home()),
     ScrollConfiguration(behavior: NoGlowBehavior(), child: const Favorites()),
-    ScrollConfiguration(behavior: NoGlowBehavior(), child: const Profile()),
+    ScrollConfiguration(behavior: NoGlowBehavior(), child: const Profile_Page()),
   ];
 
   Future<String?>? user_dp_future;
