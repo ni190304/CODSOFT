@@ -7,14 +7,14 @@ class Neubox4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 10, right: 10),
+      padding: EdgeInsets.all(7),
       child: Center(
         child: child,
       ),
-      height: 125,
+      height: 485,
       width: 300,
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Colors.black,

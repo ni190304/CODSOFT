@@ -30,7 +30,7 @@ class _QuoteState extends State<Quote> {
   final _pageController = PageController();
 
   final _screens = [
-    ScrollConfiguration(behavior: NoGlowBehavior(), child: const Home()),
+    ScrollConfiguration(behavior: NoGlowBehavior(), child: Home()),
     ScrollConfiguration(behavior: NoGlowBehavior(), child: const Favorites()),
     ScrollConfiguration(behavior: NoGlowBehavior(), child: const Profile()),
   ];
@@ -238,25 +238,7 @@ class _QuoteState extends State<Quote> {
                     const SizedBox(
                       height: 15,
                     ),
-                    ListTile(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: ((context) => const Home())));
-                      },
-                      title: Text(
-                        'Home',
-                        style: other(),
-                      ),
-                      leading: const Icon(
-                        Icons.home,
-                        size: 26,
-                        color: Colors.orange,
-                      ),
-                      trailing:
-                          const Icon(Icons.arrow_forward_ios_sharp, size: 26),
-                    ),
+                    
                     ListTile(
                       onTap: () {
                         Navigator.push(
@@ -333,7 +315,7 @@ class _QuoteState extends State<Quote> {
               ),
               BottomNavigationBarItem(
                 icon: Icon(
-                  index == 1 ? Icons.star : Icons.star_border_outlined,
+                  index == 1 ? Icons.favorite : Icons.favorite_border,
                   size: index == 1 ? 32 : 27,
                   color: Theme.of(context).colorScheme.onSecondaryContainer,
                 ),

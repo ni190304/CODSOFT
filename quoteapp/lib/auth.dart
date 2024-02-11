@@ -587,19 +587,20 @@ class _AuthScreenState extends State<AuthScreen> {
                     }
                   },
                   child: Neubox3(
+                      ss: () {},
                       child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Sign in with ',
-                        style: signinnamestyle(),
-                      ),
-                      SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: Image.asset('lib/pics/google.jpg')),
-                    ],
-                  )),
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Sign in with ',
+                            style: signinnamestyle(),
+                          ),
+                          SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: Image.asset('lib/pics/google.jpg')),
+                        ],
+                      )),
                 ),
               if (!_isAuthenticating && _isLogin)
                 TextButton(
