@@ -19,6 +19,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 
 late int _fav;
 late int _bookmark;
@@ -54,30 +55,30 @@ class FavIndexNotifier extends ChangeNotifier {
 }
 
 void showdismsnack2(BuildContext context) => {
-        Flushbar(
-          shouldIconPulse: false,
-          icon: const Icon(
-            Icons.image,
-            color: Colors.black,
-          ),
-          message: 'Saved to Gallery successfully',
-          messageSize: 16,
-          messageColor: Colors.white,
-          flushbarPosition: FlushbarPosition.TOP,
-          margin: const EdgeInsets.fromLTRB(8, kToolbarHeight, 8, 0),
-          duration: const Duration(milliseconds: 1500),
-          padding: const EdgeInsets.all(24),
-          dismissDirection: FlushbarDismissDirection.HORIZONTAL,
-          borderRadius: BorderRadius.circular(20),
-          barBlur: 15,
-          backgroundColor: Colors.black.withOpacity(0.5),
-          backgroundGradient: LinearGradient(colors: [
-            Colors.black,
-            Theme.of(context).colorScheme.primary,
-            const Color.fromARGB(255, 64, 64, 64),
-          ]),
-        )..show(context)
-      };
+      Flushbar(
+        shouldIconPulse: false,
+        icon: const Icon(
+          Icons.image,
+          color: Colors.black,
+        ),
+        message: 'Saved to Gallery successfully',
+        messageSize: 16,
+        messageColor: Colors.white,
+        flushbarPosition: FlushbarPosition.TOP,
+        margin: const EdgeInsets.fromLTRB(8, kToolbarHeight, 8, 0),
+        duration: const Duration(milliseconds: 1500),
+        padding: const EdgeInsets.all(24),
+        dismissDirection: FlushbarDismissDirection.HORIZONTAL,
+        borderRadius: BorderRadius.circular(20),
+        barBlur: 15,
+        backgroundColor: Colors.black.withOpacity(0.5),
+        backgroundGradient: LinearGradient(colors: [
+          Colors.black,
+          Theme.of(context).colorScheme.primary,
+          const Color.fromARGB(255, 64, 64, 64),
+        ]),
+      )..show(context)
+    };
 
 void showdismsnack(BuildContext context) => {
       Flushbar(
@@ -166,123 +167,134 @@ class _HomeState extends State<Home> {
       controller: controller,
       child: Scaffold(
         body: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 25,
-              ),
-              Stack(
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await Future.delayed(const Duration(milliseconds: 500));
+              setState(() {
+                _currentIndex = random.nextInt(formattedquotes.length);
+              });
+            },
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
+            child: Center(
+              child: ListView(
                 children: [
-                  buildImage(),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: IconButton(
-                        color: Colors.red,
-                        icon: Icon(
-                          isFav ? Icons.favorite : Icons.favorite_border,
-                          size: 34,
-                        ),
-                        onPressed: () async {
-                          final favIndexNotifier =
-                              Provider.of<FavIndexNotifier>(context,
-                                  listen: false);
-
-                          setState(() {
-                            isFav = !isFav;
-                          });
-
-                          final email =
-                              FirebaseAuth.instance.currentUser!.email;
-
-                          await FirebaseFirestore.instance
-                              .collection('Favorites')
-                              .doc(email)
-                              .collection("Quotes")
-                              .doc("Quote${favIndexNotifier.fav}")
-                              .set({
-                            "message": formattedquotes[_currentIndex].message,
-                            "author": formattedquotes[_currentIndex].author,
-                            "isFav": isFav
-                          });
-
-                          favIndexNotifier.increment();
-
-                          showdismsnack(context);
-                        },
-                      ),
-                    ),
+                  const SizedBox(
+                    height: 25,
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Neubox3(
-                    ss: () async {
-                      final image =
-                          await controller.captureFromWidget(buildImage());
-
-                      if (image == null) return;
-
-                      await saveAndShare(image);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            tooltip: 'Share',
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.share_sharp,
-                              color: Colors.green,
-                            )),
-                        const Text(
-                          'Share',
-                          style: TextStyle(fontSize: 17),
-                        )
-                      ],
-                    ),
+                  Stack(
+                    children: [
+                      buildImage(),
+                      Positioned(
+                        bottom: 0,
+                        right: 17,
+                        child: Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: IconButton(
+                            color: Colors.red,
+                            icon: Icon(
+                              isFav ? Icons.favorite : Icons.favorite_border,
+                              size: 34,
+                            ),
+                            onPressed: () async {
+                              final favIndexNotifier =
+                                  Provider.of<FavIndexNotifier>(context,
+                                      listen: false);
+            
+                              setState(() {
+                                isFav = !isFav;
+                              });
+            
+                              final email =
+                                  FirebaseAuth.instance.currentUser!.email;
+            
+                              await FirebaseFirestore.instance
+                                  .collection('Favorites')
+                                  .doc(email)
+                                  .collection("Quotes")
+                                  .doc("Quote${favIndexNotifier.fav}")
+                                  .set({
+                                "message": formattedquotes[_currentIndex].message,
+                                "author": formattedquotes[_currentIndex].author,
+                                "isFav": isFav
+                              });
+            
+                              favIndexNotifier.increment();
+            
+                              showdismsnack(context);
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
-                    width: 25,
+                    height: 20,
                   ),
-                  Neubox3(
-                    ss: () async {
-                      final image =
-                          await controller.captureFromWidget(buildImage());
-
-                      if (image == null) return;
-
-                      await saveImage(image);
-
-                      showdismsnack2(context);
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        IconButton(
-                            tooltip: 'Capture',
-                            onPressed: () {},
-                            icon: const Icon(
-                              Icons.camera_alt,
-                              color: Colors.black,
-                            )),
-                        const Text(
-                          'Capture',
-                          style: TextStyle(fontSize: 17),
-                        )
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Neubox3(
+                        ss: () async {
+                          final image =
+                              await controller.captureFromWidget(buildImage());
+            
+                          if (image == null) return;
+            
+                          await saveAndShare(image);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                                tooltip: 'Share',
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.share_sharp,
+                                  color: Colors.green,
+                                )),
+                            const Text(
+                              'Share',
+                              style: TextStyle(fontSize: 17),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 25,
+                      ),
+                      Neubox3(
+                        ss: () async {
+                          final image =
+                              await controller.captureFromWidget(buildImage());
+            
+                          if (image == null) return;
+            
+                          await saveImage(image);
+            
+                          showdismsnack2(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                                tooltip: 'Capture',
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.black,
+                                )),
+                            const Text(
+                              'Capture',
+                              style: TextStyle(fontSize: 17),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -293,7 +305,7 @@ class _HomeState extends State<Home> {
     TextStyle message() {
       return GoogleFonts.ebGaramond(
           fontSize: 27,
-          color: Theme.of(context).colorScheme.onSecondaryContainer);
+          color: Theme.of(context).colorScheme.onSecondaryContainer, fontWeight: FontWeight.w100);
     }
 
     TextStyle author() {
@@ -301,38 +313,40 @@ class _HomeState extends State<Home> {
     }
 
     TextStyle title() {
-      return GoogleFonts.redHatDisplay(fontSize: 28, color: Colors.black);
+      return GoogleFonts.redHatDisplay(fontSize: 30, color: Colors.black, fontWeight: FontWeight.w500);
     }
 
-    return Neubox4(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              'Wisdom Nuggets',
-              style: title().copyWith(decoration: TextDecoration.underline),
+    return Center(
+      child: Neubox4(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(
+              height: 10,
             ),
-          ),
-          const SizedBox(
-            height: 120,
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(formattedquotes[_currentIndex].message,
-                textAlign: TextAlign.center, style: message()),
-          ),
-          const SizedBox(height: 35),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Text('- ${formattedquotes[_currentIndex].author}',
-                textAlign: TextAlign.center, style: author()),
-          ),
-        ],
+            Align(
+              alignment: Alignment.center,
+              child: Text(
+                'Wisdom Nuggets',
+                style: title(),
+              ),
+            ),
+            const SizedBox(
+              height: 120,
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: Text(formattedquotes[_currentIndex].message,
+                  textAlign: TextAlign.center, style: message()),
+            ),
+            const SizedBox(height: 35),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Text('- ${formattedquotes[_currentIndex].author}',
+                  textAlign: TextAlign.center, style: author()),
+            ),
+          ],
+        ),
       ),
     );
   }

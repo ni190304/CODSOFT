@@ -28,7 +28,7 @@ class _StartState extends State<Start> {
       theme: ThemeData.from(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color.fromARGB(159, 39, 2, 35),
+          seedColor: Color.fromARGB(159, 1, 15, 23),
         ),
       ),
       title: 'QuoteApp',

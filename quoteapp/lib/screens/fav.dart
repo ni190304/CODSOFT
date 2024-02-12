@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 
 import '../animatedboxes/neubox4.dart';
+import '../animatedboxes/neubox5.dart';
 
 class Favorites extends StatefulWidget {
   const Favorites({super.key});
@@ -46,7 +47,8 @@ class _FavoritesState extends State<Favorites> {
     TextStyle messagestyle() {
       return GoogleFonts.ebGaramond(
           fontSize: 27,
-          color: Theme.of(context).colorScheme.onSecondaryContainer);
+          color: Theme.of(context).colorScheme.onSecondaryContainer,
+          fontWeight: FontWeight.w100);
     }
 
     TextStyle authorstyle() {
@@ -54,7 +56,8 @@ class _FavoritesState extends State<Favorites> {
     }
 
     TextStyle titlestyle() {
-      return GoogleFonts.redHatDisplay(fontSize: 28, color: Colors.black);
+      return GoogleFonts.redHatDisplay(
+          fontSize: 30, color: Colors.black, fontWeight: FontWeight.w500);
     }
 
     return SafeArea(
@@ -63,6 +66,13 @@ class _FavoritesState extends State<Favorites> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Text('Amongst Your Favorites', style: titlestyle()),
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -104,32 +114,23 @@ class _FavoritesState extends State<Favorites> {
                           var favStatus = quote['isFav'];
 
                           return Padding(
-                            padding: const EdgeInsets.only(top: 20.0),
+                            padding: const EdgeInsets.only(top:15.0),
                             child: Center(
                               child: Column(
                                 children: [
                                   Stack(
                                     children: [
-                                      Neubox4(
+                                      Neubox5(
                                         child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.start,
                                           children: [
                                             const SizedBox(
-                                              height: 10,
+                                              height: 20,
                                             ),
-                                            Align(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                'Amongst Your Favorites',
-                                                style: titlestyle().copyWith(
-                                                    decoration: TextDecoration
-                                                        .underline),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 120,
-                                            ),
+                                            // const SizedBox(
+                                            //   height: 120,
+                                            // ),
                                             Align(
                                               alignment: Alignment.center,
                                               child: Text(message,
@@ -163,7 +164,7 @@ class _FavoritesState extends State<Favorites> {
                                               setState(() {
                                                 favStatus = !favStatus;
                                               });
-
+                          
                                               await FirebaseFirestore.instance
                                                   .collection('Favorites')
                                                   .doc(email)
@@ -171,7 +172,7 @@ class _FavoritesState extends State<Favorites> {
                                                   .doc(snapshot
                                                       .data!.docs[index].id)
                                                   .update({"isFav": favStatus});
-
+                          
                                               ScaffoldMessenger.of(context)
                                                   .clearSnackBars();
                                               ScaffoldMessenger.of(context)
