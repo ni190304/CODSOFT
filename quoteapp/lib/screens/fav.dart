@@ -179,7 +179,7 @@ class _FavoritesState extends State<Favorites> {
                                                   .showSnackBar(
                                                 const SnackBar(
                                                     content: Text(
-                                                        'Removed from favorites successfully')),
+                                                        'Removed from favorites')),
                                               );
                                             },
                                           ),
