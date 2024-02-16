@@ -16,16 +16,28 @@ class _MongoDbInsertState extends State<MongoDbInsert> {
   var lnameController = TextEditingController();
   var addressController = TextEditingController();
 
+  var checkinsertupdate = "Insert";
+
   @override
   Widget build(BuildContext context) {
+    MongoDbModel data =
+        ModalRoute.of(context)!.settings.arguments as MongoDbModel;
+
+    if (data != null) {
+      fnameController.text = data.firstName;
+      lnameController.text = data.lastName;
+      addressController.text = data.address;
+      checkinsertupdate = "Update";
+    }
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(15.0),
         child: SafeArea(
             child: Column(
           children: [
-            const Text(
-              'Insert Data',
+            Text(
+              checkinsertupdate,
               style: TextStyle(fontSize: 22),
             ),
             const SizedBox(
@@ -57,10 +69,15 @@ class _MongoDbInsertState extends State<MongoDbInsert> {
                     child: const Text('Generate Data')),
                 ElevatedButton(
                     onPressed: () {
-                      insertData(fnameController.text, lnameController.text,
-                          addressController.text);
+                      if (checkinsertupdate == 'Update') {
+                        _updateData(data.id, fnameController.text,
+                            lnameController.text, addressController.text);
+                      } else {
+                        _insertData(fnameController.text, lnameController.text,
+                            addressController.text);
+                      }
                     },
-                    child: const Text('Insert Data'))
+                    child: Text(checkinsertupdate))
               ],
             )
           ],
@@ -69,7 +86,16 @@ class _MongoDbInsertState extends State<MongoDbInsert> {
     );
   }
 
-  Future<void> insertData(String fname, String lname, String address) async {
+  Future<void> _updateData(
+      var id, String fName, String lName, String address) async {
+        // print(object)
+    final updateData = MongoDbModel(
+        id: id, firstName: fName, lastName: lName, address: address);
+    await MongoDatabase.updateData(updateData)
+        .whenComplete(() => Navigator.pop(context));
+  }
+
+  Future<void> _insertData(String fname, String lname, String address) async {
     var id = M.ObjectId();
     final data = MongoDbModel(
         id: id, firstName: fname, lastName: lname, address: address);

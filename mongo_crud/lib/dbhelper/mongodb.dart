@@ -18,6 +18,15 @@ class MongoDatabase {
     return arrData;
   }
 
+  static Future<void> updateData(MongoDbModel data)async{
+    var result = await userCollection.findOne({"_id": data.id});
+    result['firstName'] = data.firstName;
+    result['lastName'] = data.lastName;
+    result['address'] = data.address;
+    await userCollection.save(result);
+
+  }
+
   static Future<String> insert(MongoDbModel data) async {
     try {
       var result = await userCollection.insertOne(data.toJson());

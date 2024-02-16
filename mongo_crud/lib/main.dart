@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mongo_crud/dbhelper/mongodb.dart';
 import 'package:mongo_crud/display.dart';
 import 'package:mongo_crud/insert.dart';
+import 'package:mongo_crud/update.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
         title: 'MongoDB CRUD',
         theme: ThemeData(primaryColor: Colors.blue),
-        home: const MongoDbDisplay());
+        home: const MongoDbUpdate());
   }
 }
 
@@ -35,3 +36,5 @@ class _MyHomePageState extends State<MyHomePage> {
     return const Placeholder();
   }
 }
+
+
