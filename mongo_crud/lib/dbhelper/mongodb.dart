@@ -13,9 +13,9 @@ class MongoDatabase {
     userCollection = db.collection(USER_COLLECTION);
   }
 
-  static Future<Stream<List<Map<String, dynamic>>>> getData() async {
+  static Future<List<Map<String, dynamic>>> getData() async {
     final arrData = await userCollection.find().toList();
-    return Stream.fromIterable([arrData]);
+    return arrData;
   }
 
   static Future<String> insert(MongoDbModel data) async {

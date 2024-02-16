@@ -11,72 +11,62 @@ class MongoDbDisplay extends StatefulWidget {
 }
 
 class _MongoDbDisplayState extends State<MongoDbDisplay> {
-  late Future<Stream<List<Map<String, dynamic>>>> dataStreamFuture;
+  late Future<List<Map<String, dynamic>>> dataFuture;
 
   @override
   void initState() {
     super.initState();
-    // Initialize the data stream future
-    dataStreamFuture = MongoDatabase.getData();
+    // Initialize the data future
+    dataFuture = MongoDatabase.getData();
   }
+
+  Future<void> _refreshData() async {
+  await Future.delayed(Duration(seconds: 1)); // Delay for 1 second
+  setState(() {
+    dataFuture = MongoDatabase.getData();
+  });
+}
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: FutureBuilder<Stream<List<Map<String, dynamic>>>>(
-          future: dataStreamFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text("Error: ${snapshot.error}"),
-              );
-            } else {
-              final dataStream = snapshot.data;
-              if (dataStream != null) {
-                return StreamBuilder<List<Map<String, dynamic>>>(
-                  stream: dataStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.hasError) {
-                      return Center(
-                        child: Text("Error: ${snapshot.error}"),
-                      );
-                    } else {
-                      final data = snapshot.data;
-                      if (data != null && data.isNotEmpty) {
-                        var totalData = data.length;
-                        print("Total data: ${totalData.toString()}");
-                        return ListView.builder(
-                          itemCount: totalData,
-                          itemBuilder: (context, index) {
-                            final item = data[index];
-                            final model = MongoDbModel.fromJson(item);
-                            return displayCard(model);
-                          },
-                        );
-                      } else {
-                        return Center(
-                          child: Text("No data available"),
-                        );
-                      }
-                    }
-                  },
+        child: RefreshIndicator(
+          
+          onRefresh: _refreshData,
+          child: FutureBuilder<List<Map<String, dynamic>>>(
+            future: dataFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text("Error: ${snapshot.error}"),
                 );
               } else {
-                return Center(
-                  child: Text("No data stream available"),
-                );
+                final data = snapshot.data;
+                if (data != null && data.isNotEmpty) {
+                  var totalData = data.length;
+                  print("Total data: ${totalData.toString()}");
+                  return ListView.builder(
+                    itemCount: totalData,
+                    itemBuilder: (context, index) {
+                      final item = data[index];
+                      final model = MongoDbModel.fromJson(item);
+                      return displayCard(model);
+                    },
+                  );
+                } else {
+                  return Center(
+                    child: Text("No data available"),
+                  );
+                }
               }
-            }
-          },
+            },
+          ),
         ),
       ),
     );
