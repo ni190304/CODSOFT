@@ -22,7 +22,7 @@ class _Student_Intro1State extends State<Student_Intro1> {
   }
 
   Future<void> _saveSelectedYear(String year) async {
-    await _prefs.setString('${email}selectedYear', year);
+    await _prefs.setString('student${email}selectedYear', year);
 
     Future.delayed(const Duration(milliseconds: 1500), () {
       Navigator.of(context).pushReplacement(

@@ -22,7 +22,7 @@ class _Student_Intro2State extends State<Student_Intro2> {
   }
 
   Future<void> _saveSelectedBranch(String branch) async {
-    await _prefs.setString('${email}selectedBranch', branch);
+    await _prefs.setString('student${email}selectedBranch', branch);
 
     Future.delayed(const Duration(milliseconds: 1500), () {
       Navigator.of(context).pushReplacement(

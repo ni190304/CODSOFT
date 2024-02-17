@@ -28,19 +28,19 @@ class _Student_Intro3State extends State<Student_Intro3> {
   Future<void> _getStudentYear(String user_email) async {
     _prefs = await SharedPreferences.getInstance();
     setState(() {
-      _selectedYear = _prefs.getString('${user_email}selectedYear') ?? '';
+      _selectedYear = _prefs.getString('student${user_email}selectedYear') ?? '';
     });
   }
 
   Future<void> _getStudentBranch(String user_email) async {
     _prefs = await SharedPreferences.getInstance();
     setState(() {
-      _selectedBranch = _prefs.getString('${user_email}selectedBranch') ?? '';
+      _selectedBranch = _prefs.getString('student${user_email}selectedBranch') ?? '';
     });
   }
 
   Future<void> _saveStudentData(String _selectedClass) async {
-    _prefs.setString('${email}selectedClass', _selectedClass);
+    _prefs.setString('student${email}selectedClass', _selectedClass);
     await FirebaseFirestore.instance.collection('Student').doc(email).set({
       "year": _selectedYear,
       "branch": _selectedBranch,
