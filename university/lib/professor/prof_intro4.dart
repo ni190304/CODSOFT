@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:university/start.dart';
 
 import '../details.dart';
 
@@ -17,49 +18,29 @@ class Prof_Intro4 extends StatefulWidget {
 }
 
 class _Prof_Intro4State extends State<Prof_Intro4> {
-  late SharedPreferences _prefs;
-  List<String> _selectedClasses = [];
-  List<String> _selectedBranches = [];
-  List<String> _selectedYears = [];
+  SharedPreferences? _prefs;
+  List<String>? _selectedClasses;
+  List<String>? _selectedBranches;
+  List<String>? _selectedYears;
 
   String? email;
 
   @override
   void initState() {
-    super.initState();
     email = FirebaseAuth.instance.currentUser!.email;
     SharedPreferences.getInstance().then((prefs) {
       setState(() {
         _prefs = prefs;
+        _selectedClasses =
+            _prefs!.getStringList('prof${email}selectedClasses') ?? [];
+        _selectedYears =
+            _prefs!.getStringList('prof${email}selectedYears') ?? [];
+        _selectedBranches =
+            _prefs!.getStringList('prof${email}selectedBranches') ?? [];
       });
     });
-    _getProfClasses(email!);
-    _getProfYears(email!);
-    _getProfBranches(email!);
-  }
 
-  Future<void> _getProfClasses(String user_email) async {
-    
-    setState(() {
-      _selectedClasses =
-          _prefs.getStringList('prof${email}selectedClasses') ?? [];
-    });
-  }
-
-  Future<void> _getProfYears(String user_email) async {
-    
-    setState(() {
-      _selectedYears =
-          _prefs.getStringList('prof${user_email}selectedYears') ?? [];
-    });
-  }
-
-  Future<void> _getProfBranches(String user_email) async {
-    
-    setState(() {
-      _selectedBranches =
-          _prefs.getStringList('prof${user_email}selectedBranches') ?? [];
-    });
+    super.initState();
   }
 
   void _toggleSubject(String _class, String subject) {
@@ -81,48 +62,69 @@ class _Prof_Intro4State extends State<Prof_Intro4> {
   }
 
   void _saveAndProceed() async {
-    
     String _classSelectedSubjectsJson = json.encode(_classSelectedSubjects);
-    await _prefs.setString(
-        'prof${email}selectedSubjects', _classSelectedSubjectsJson);
+    await _prefs!
+        .setString('prof${email}selectedSubjects', _classSelectedSubjectsJson);
 
     await FirebaseFirestore.instance.collection('Professor').doc(email).set({
       'years': _selectedYears,
       'branches': _selectedBranches,
       'classSubjects': _classSelectedSubjectsJson
     });
+
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => Start()));
   }
 
   TextStyle _getTextStyle2() {
     return GoogleFonts.katibeh(
       textStyle: const TextStyle(
         color: Colors.black,
-        fontSize: 30,
+        fontSize: 37,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Text(
-            'Which subjects do you teach for each class ?',
-            style: _getTextStyle2(),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: SubjectsList(
-              onSave: _toggleSubject,
-              selectedClasses: _selectedClasses,
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 30,
             ),
-          ),
-          ElevatedButton(
-            onPressed: _saveAndProceed,
-            child: Text('Save and Proceed'),
-          ),
-        ],
+            Text(
+              'Which subjects do you teach for each class ?',
+              style: _getTextStyle2(),
+            ),
+            const SizedBox(height: 30),
+            Expanded(
+              child: SubjectsList(
+                onSave: _toggleSubject,
+                selectedClasses: _selectedClasses ?? [],
+              ),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            SizedBox(
+              height: 65,
+              width: 220,
+              child: ElevatedButton(
+                onPressed: _saveAndProceed,
+                style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black),
+                child: const Text(
+                  'Save and Proceed',
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -158,6 +160,15 @@ class _SubjectsListState extends State<SubjectsList> {
     return [];
   }
 
+  TextStyle _getTextStyle2() {
+    return GoogleFonts.katibeh(
+      textStyle: const TextStyle(
+        color: Colors.black,
+        fontSize: 30,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -171,38 +182,64 @@ class _SubjectsListState extends State<SubjectsList> {
 
         const SizedBox(height: 20);
 
-        return GridView.builder(
-            itemCount: subjects.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 10.0,
-            ),
-            itemBuilder: (BuildContext context, int index) {
-              return _buildSubjectButton(_class, subjects[index]);
-            });
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Class : $_class ',
+                style: _getTextStyle2(),
+              ),
+              const SizedBox(
+                height: 50,
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: subjects.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final subject = subjects[index];
+                  final isSelected =
+                      (_classSelectedSubjects[_class] ?? []).contains(subject);
+
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 150,
+                        child: ElevatedButton(
+                            onPressed: () => widget.onSave(_class, subject),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 30,
+                              ),
+                              foregroundColor:
+                                  isSelected ? Colors.white : Colors.black,
+                              backgroundColor: isSelected
+                                  ? Color.fromARGB(255, 31, 1, 61)
+                                  : Color.fromARGB(255, 132, 188, 234),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                            ),
+                            child: Text(subject)),
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      )
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 45,
+              )
+            ],
+          ),
+        );
       },
     );
-  }
-
-  Widget _buildSubjectButton(String _class, String subject) {
-    return ElevatedButton(
-        onPressed: () => widget.onSave(_class, subject),
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 40,
-          ),
-          foregroundColor: _classSelectedSubjects[_class]!.contains(subject)
-              ? Colors.white
-              : Colors.black,
-          backgroundColor: _classSelectedSubjects[_class]!.contains(subject)
-              ? Color.fromARGB(255, 31, 1, 61)
-              : Color.fromARGB(255, 132, 188, 234),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-        ),
-        child: Text(subject));
   }
 }

@@ -549,7 +549,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 },
                               ),
                               SizedBox(
-                                height: isSmallScreen ? 3 : 5,
+                                height: isSmallScreen ? 6 : 10,
                               ),
                               if (!_isLogin)
                                 DropdownButtonFormField(

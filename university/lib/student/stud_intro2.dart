@@ -13,7 +13,7 @@ class Student_Intro2 extends StatefulWidget {
 
 class _Student_Intro2State extends State<Student_Intro2> {
   late SharedPreferences _prefs;
-   String? _selectedBranch;
+  String? _selectedBranch;
   String? email;
 
   @override
@@ -58,132 +58,72 @@ class _Student_Intro2State extends State<Student_Intro2> {
               'Which branch are you pursuing ?',
               style: _getTextStyle2(),
             ),
-            const SizedBox(height: 35),
-            Center(
-              child: Container(
-                height: 520,
-                width: 250,
-                child: GridView(
-                  shrinkWrap: true,
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
-                  ),
+            const SizedBox(height: 50),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    SizedBox(
-                      height: 20,
-                      width: 100,
-                      child: ElevatedButton(
-                          onPressed: () => _saveSelectedBranch('CMPN'),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 31, 1, 61),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                          ),
-                          child: Text('CMPN')),
-                    ),
-                    SizedBox(
-                      height: 20,
-                      child: ElevatedButton(
-                          onPressed: () => _saveSelectedBranch('IT'),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 31, 1, 61),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                          ),
-                          child: Text('IT')),
-                    ),
-                    SizedBox(
-                      height: 20,
-                      child: ElevatedButton(
-                          onPressed: () => _saveSelectedBranch('MECH.'),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 31, 1, 61),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                          ),
-                          child: Text('MECH.')),
-                    ),
-                    SizedBox(
-                      height: 20,
-                      child: ElevatedButton(
-                          onPressed: () => _saveSelectedBranch('INSTRU.'),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 31, 1, 61),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                          ),
-                          child: Text('INSTRU.')),
-                    ),
-                    SizedBox(
-                      height: 20,
-                      child: ElevatedButton(
-                          onPressed: () => _saveSelectedBranch('AI&DS'),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 31, 1, 61),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                          ),
-                          child: Text('AI&DS')),
-                    ),
-                    SizedBox(
-                      height: 20,
-                      child: ElevatedButton(
-                          onPressed: () => _saveSelectedBranch('AI&ML'),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 31, 1, 61),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                          ),
-                          child: Text('AI&ML')),
-                    ),
-                    SizedBox(
-                      height: 20,
-                      child: ElevatedButton(
-                          onPressed: () => _saveSelectedBranch('EXTC'),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 31, 1, 61),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                          ),
-                          child: Text('EXTC')),
-                    ),
-                    SizedBox(
-                      height: 20,
-                      child: ElevatedButton(
-                          onPressed: () => _saveSelectedBranch('ETRX'),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Color.fromARGB(255, 31, 1, 61),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                          ),
-                          child: Text('ETRX')),
-                    ),
+                    _buildBranchButton('CMPN'),
+                    _buildBranchButton('IT'),
                   ],
                 ),
-              ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBranchButton('MECH.'),
+                    _buildBranchButton('INSTRU.'),
+                  ],
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBranchButton('AI&DS'),
+                    _buildBranchButton('AI&ML'),
+                  ],
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBranchButton('EXTC'),
+                    _buildBranchButton('ETRX'),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildBranchButton(String branch) {
+    return SizedBox(
+      height: 50,
+      width: 150,
+      child: ElevatedButton(
+          onPressed: () => _saveSelectedBranch(branch),
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 40,
+            ),
+            foregroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 31, 1, 61),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
+          ),
+          child: Text(branch)),
     );
   }
 }

@@ -14,9 +14,9 @@ class Prof_Intro3 extends StatefulWidget {
 }
 
 class _Prof_Intro3State extends State<Prof_Intro3> {
-  late SharedPreferences _prefs;
-  List<String> _selectedBranches = [];
-  List<String> _selectedYears = [];
+  SharedPreferences? _prefs;
+  List<String>? _selectedBranches;
+  List<String>? _selectedYears;
   String? email;
 
   @override
@@ -26,25 +26,12 @@ class _Prof_Intro3State extends State<Prof_Intro3> {
     SharedPreferences.getInstance().then((prefs) {
       setState(() {
         _prefs = prefs;
+        _selectedYears = _prefs!.getStringList('prof${email}selectedYears');
+        _selectedBranches =
+            _prefs!.getStringList('prof${email}selectedBranches');
+        print(_selectedYears);
+        print(_selectedBranches);
       });
-    });
-    _getProfYears(email!);
-    _getProfBranches(email!);
-  }
-
-  Future<void> _getProfYears(String user_email) async {
-  
-    setState(() {
-      _selectedYears =
-          _prefs.getStringList('prof${user_email}selectedYears') ?? [];
-    });
-  }
-
-  Future<void> _getProfBranches(String user_email) async {
-  
-    setState(() {
-      _selectedBranches =
-          _prefs.getStringList('prof${user_email}selectedBranches') ?? [];
     });
   }
 
@@ -64,13 +51,13 @@ class _Prof_Intro3State extends State<Prof_Intro3> {
     return GoogleFonts.katibeh(
       textStyle: const TextStyle(
         color: Colors.black,
-        fontSize: 30,
+        fontSize: 37,
       ),
     );
   }
 
   void _saveAndProceed() async {
-    _prefs.setStringList('prof${email}selectedClasses', _selectedClasses);
+    _prefs!.setStringList('prof${email}selectedClasses', _selectedClasses);
 
     // Navigate to the next page
     Navigator.of(context).pushReplacement(
@@ -80,29 +67,42 @@ class _Prof_Intro3State extends State<Prof_Intro3> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Which classes are you teaching?',
-              style: _getTextStyle2(),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-              child: ClassesList(
-                profYears: _selectedYears,
-                profBranches: _selectedBranches,
-                onSave: _toggleClass,
-                selectedClasses: _selectedClasses,
+    return SafeArea(
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 30,),
+              Text(
+                'Which classes are you teaching?',
+                style: _getTextStyle2(),
               ),
-            ),
-            ElevatedButton(
-              onPressed: _saveAndProceed,
-              child: Text('Save and Proceed'),
-            ),
-          ],
+              const SizedBox(height: 30),
+              
+              Expanded(
+                child: ClassesList(
+                  profYears: _selectedYears ?? [],
+                  profBranches: _selectedBranches ?? [],
+                  onSave: _toggleClass,
+                  selectedClasses: _selectedClasses,
+                ),
+              ),
+              const SizedBox(height: 50,),
+              SizedBox(
+                height: 65,
+                width: 220,
+                child: ElevatedButton(
+                  onPressed: _saveAndProceed,
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black
+                  ),
+                  child: const Text('Save and Proceed', style: TextStyle(fontSize: 16),),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -146,47 +146,65 @@ class ClassesList extends StatelessWidget {
 
         final branchData = yearData['branches'].firstWhere(
           (branch) => branch['branch'] == profBranches[branchIndex],
-          orElse: () => {},
+          orElse: () => <String, Object>{},
         );
 
         final List<String> classes = branchData['classes'];
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-                'Year: ${profYears[yearIndex]}, Branch: ${profBranches[branchIndex]}',
-                style: _getTextStyle2()),
-            const SizedBox(
-              height: 50,
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: classes.length,
-              itemBuilder: (BuildContext context, int index) {
-                final _class = classes[index];
-                final isSelected = selectedClasses.contains(_class);
-
-                return ElevatedButton(
-                    onPressed: () => onSave(_class),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 40,
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                  'Year: ${profYears[yearIndex]}, Branch: ${profBranches[branchIndex]}',
+                  style: _getTextStyle2(),),
+              const SizedBox(
+                height: 50,
+              ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                itemCount: classes.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final _class = classes[index];
+                  final isSelected = selectedClasses.contains(_class);
+        
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: 50,
+                        width: 150,
+                        child: ElevatedButton(
+                            onPressed: () => onSave(_class),
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 30,
+                              ),
+                              foregroundColor:
+                                  isSelected ? Colors.white : Colors.black,
+                              backgroundColor: isSelected
+                                  ? Color.fromARGB(255, 31, 1, 61)
+                                  : Color.fromARGB(255, 132, 188, 234),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                            ),
+                            child: Text(_class)),
                       ),
-                      foregroundColor: isSelected ? Colors.white : Colors.black,
-                      backgroundColor: isSelected
-                          ? Color.fromARGB(255, 31, 1, 61)
-                          : Color.fromARGB(255, 132, 188, 234),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(40),
-                      ),
-                    ),
-                    child: Text(_class));
-              },
-            ),
-          ],
+                      const SizedBox(
+                        height: 25,
+                      )
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 45,
+              )
+            ],
+          ),
         );
       },
     );

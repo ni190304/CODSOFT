@@ -32,7 +32,7 @@ class _Prof_Intro2State extends State<Prof_Intro2> {
     return GoogleFonts.katibeh(
       textStyle: const TextStyle(
         color: Colors.black,
-        fontSize: 30,
+        fontSize: 37,
       ),
     );
   }
@@ -67,28 +67,61 @@ class _Prof_Intro2State extends State<Prof_Intro2> {
               style: _getTextStyle2(),
             ),
             const SizedBox(height: 50),
-            Expanded(
-              child: GridView(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10.0,
-                  mainAxisSpacing: 10.0,
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBranchButton('CMPN'),
+                    _buildBranchButton('IT'),
+                  ],
                 ),
-                children: [
-                  _buildBranchButton('CMPN'),
-                  _buildBranchButton('IT'),
-                  _buildBranchButton('MECH.'),
-                  _buildBranchButton('INSTRU.'),
-                  _buildBranchButton('AI&DS'),
-                  _buildBranchButton('AI&ML'),
-                  _buildBranchButton('EXTC'),
-                  _buildBranchButton('ETRX')
-                ],
-              ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBranchButton('MECH.'),
+                    _buildBranchButton('INSTRU.'),
+                  ],
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBranchButton('AI&DS'),
+                    _buildBranchButton('AI&ML'),
+                  ],
+                ),
+                const SizedBox(
+                  height: 25,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildBranchButton('EXTC'),
+                    _buildBranchButton('ETRX'),
+                  ],
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: _saveSelectedBranches,
-              child: Text('Save and Proceed'),
+            SizedBox(
+              height:65,
+            ),
+            SizedBox(
+              height: 65,
+              width: 220,
+              child: ElevatedButton(
+                onPressed: _saveSelectedBranches,
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.black
+                ),
+                child: Text('Save and Proceed', style: TextStyle(fontSize: 16),),
+              ),
             ),
           ],
         ),
@@ -97,22 +130,27 @@ class _Prof_Intro2State extends State<Prof_Intro2> {
   }
 
   Widget _buildBranchButton(String branch) {
-    return ElevatedButton(
-        onPressed: () => _toggleBranch(branch),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(
-            vertical: 10,
-            horizontal: 40,
+    return SizedBox(
+      height: 50,
+      width: 150,
+      child: ElevatedButton(
+          onPressed: () => _toggleBranch(branch),
+          style: ElevatedButton.styleFrom(
+            padding: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 40,
+            ),
+            foregroundColor: _selectedBranches.contains(branch)
+                ? Colors.white
+                : Colors.black,
+            backgroundColor: _selectedBranches.contains(branch)
+                ? Color.fromARGB(255, 31, 1, 61)
+                : Color.fromARGB(255, 132, 188, 234),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(40),
+            ),
           ),
-          foregroundColor:
-              _selectedBranches.contains(branch) ? Colors.white : Colors.black,
-          backgroundColor: _selectedBranches.contains(branch)
-              ? Color.fromARGB(255, 31, 1, 61)
-              : Color.fromARGB(255, 132, 188, 234),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(40),
-          ),
-        ),
-        child: Text(branch));
+          child: Text(branch)),
+    );
   }
 }

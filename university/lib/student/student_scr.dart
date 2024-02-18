@@ -52,8 +52,19 @@ class _Student_ScreenState extends State<Student_Screen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(child: Text('Hello student')),
+    return Scaffold(
+      body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Hello student'),
+          IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              icon: const Icon(Icons.logout))
+        ],
+      )),
     );
   }
 }

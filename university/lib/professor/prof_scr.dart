@@ -51,10 +51,19 @@ class _Professor_ScreenState extends State<Professor_Screen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('Hello professor'),
-      ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text('Hello professor'),
+          IconButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              icon: const Icon(Icons.logout))
+        ],
+      )),
     );
   }
 }

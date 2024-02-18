@@ -32,7 +32,7 @@ class _Student_Intro1State extends State<Student_Intro1> {
     return GoogleFonts.katibeh(
       textStyle: const TextStyle(
         color: Colors.black,
-        fontSize: 30,
+        fontSize: 37,
       ),
     );
   }
