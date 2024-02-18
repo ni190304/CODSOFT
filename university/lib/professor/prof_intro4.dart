@@ -1,11 +1,13 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../details.dart';
+
+Map<String, List<String>> _classSelectedSubjects = {};
 
 class Prof_Intro4 extends StatefulWidget {
   const Prof_Intro4({super.key});
@@ -26,13 +28,18 @@ class _Prof_Intro4State extends State<Prof_Intro4> {
   void initState() {
     super.initState();
     email = FirebaseAuth.instance.currentUser!.email;
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        _prefs = prefs;
+      });
+    });
     _getProfClasses(email!);
     _getProfYears(email!);
     _getProfBranches(email!);
   }
 
   Future<void> _getProfClasses(String user_email) async {
-    _prefs = await SharedPreferences.getInstance();
+    
     setState(() {
       _selectedClasses =
           _prefs.getStringList('prof${email}selectedClasses') ?? [];
@@ -40,7 +47,7 @@ class _Prof_Intro4State extends State<Prof_Intro4> {
   }
 
   Future<void> _getProfYears(String user_email) async {
-    _prefs = await SharedPreferences.getInstance();
+    
     setState(() {
       _selectedYears =
           _prefs.getStringList('prof${user_email}selectedYears') ?? [];
@@ -48,14 +55,12 @@ class _Prof_Intro4State extends State<Prof_Intro4> {
   }
 
   Future<void> _getProfBranches(String user_email) async {
-    _prefs = await SharedPreferences.getInstance();
+    
     setState(() {
       _selectedBranches =
           _prefs.getStringList('prof${user_email}selectedBranches') ?? [];
     });
   }
-
-  Map<String, List<String>> _classSelectedSubjects = {};
 
   void _toggleSubject(String _class, String subject) {
     setState(() {
@@ -76,7 +81,7 @@ class _Prof_Intro4State extends State<Prof_Intro4> {
   }
 
   void _saveAndProceed() async {
-    _prefs = await SharedPreferences.getInstance();
+    
     String _classSelectedSubjectsJson = json.encode(_classSelectedSubjects);
     await _prefs.setString(
         'prof${email}selectedSubjects', _classSelectedSubjectsJson);
@@ -88,12 +93,24 @@ class _Prof_Intro4State extends State<Prof_Intro4> {
     });
   }
 
+  TextStyle _getTextStyle2() {
+    return GoogleFonts.katibeh(
+      textStyle: const TextStyle(
+        color: Colors.black,
+        fontSize: 30,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
         children: [
-          const Text('Which subjects do you teach for each class ?'),
+          Text(
+            'Which subjects do you teach for each class ?',
+            style: _getTextStyle2(),
+          ),
           const SizedBox(height: 20),
           Expanded(
             child: SubjectsList(
@@ -169,13 +186,23 @@ class _SubjectsListState extends State<SubjectsList> {
   }
 
   Widget _buildSubjectButton(String _class, String subject) {
-    return GestureDetector(
-      onTap: () => widget.onSave(_class, subject),
-      child: Container(
-        height: 20,
-        width: 40,
-        child: Center(child: Text(subject)),
-      ),
-    );
+    return ElevatedButton(
+        onPressed: () => widget.onSave(_class, subject),
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: 40,
+          ),
+          foregroundColor: _classSelectedSubjects[_class]!.contains(subject)
+              ? Colors.white
+              : Colors.black,
+          backgroundColor: _classSelectedSubjects[_class]!.contains(subject)
+              ? Color.fromARGB(255, 31, 1, 61)
+              : Color.fromARGB(255, 132, 188, 234),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(40),
+          ),
+        ),
+        child: Text(subject));
   }
 }

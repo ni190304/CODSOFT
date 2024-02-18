@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:university/professor/prof_intro4.dart';
 
@@ -22,12 +23,17 @@ class _Prof_Intro3State extends State<Prof_Intro3> {
   void initState() {
     super.initState();
     email = FirebaseAuth.instance.currentUser!.email;
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() {
+        _prefs = prefs;
+      });
+    });
     _getProfYears(email!);
     _getProfBranches(email!);
   }
 
   Future<void> _getProfYears(String user_email) async {
-    _prefs = await SharedPreferences.getInstance();
+  
     setState(() {
       _selectedYears =
           _prefs.getStringList('prof${user_email}selectedYears') ?? [];
@@ -35,7 +41,7 @@ class _Prof_Intro3State extends State<Prof_Intro3> {
   }
 
   Future<void> _getProfBranches(String user_email) async {
-    _prefs = await SharedPreferences.getInstance();
+  
     setState(() {
       _selectedBranches =
           _prefs.getStringList('prof${user_email}selectedBranches') ?? [];
@@ -54,8 +60,16 @@ class _Prof_Intro3State extends State<Prof_Intro3> {
     });
   }
 
+  TextStyle _getTextStyle2() {
+    return GoogleFonts.katibeh(
+      textStyle: const TextStyle(
+        color: Colors.black,
+        fontSize: 30,
+      ),
+    );
+  }
+
   void _saveAndProceed() async {
-    
     _prefs.setStringList('prof${email}selectedClasses', _selectedClasses);
 
     // Navigate to the next page
@@ -67,23 +81,29 @@ class _Prof_Intro3State extends State<Prof_Intro3> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          const Text('Which classes are you teaching?'),
-          const SizedBox(height: 20),
-          Expanded(
-            child: ClassesList(
-              profYears: _selectedYears,
-              profBranches: _selectedBranches,
-              onSave: _toggleClass,
-              selectedClasses: _selectedClasses,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Which classes are you teaching?',
+              style: _getTextStyle2(),
             ),
-          ),
-          ElevatedButton(
-            onPressed: _saveAndProceed,
-            child: Text('Save and Proceed'),
-          ),
-        ],
+            const SizedBox(height: 20),
+            Expanded(
+              child: ClassesList(
+                profYears: _selectedYears,
+                profBranches: _selectedBranches,
+                onSave: _toggleClass,
+                selectedClasses: _selectedClasses,
+              ),
+            ),
+            ElevatedButton(
+              onPressed: _saveAndProceed,
+              child: Text('Save and Proceed'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -104,6 +124,15 @@ class ClassesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle _getTextStyle2() {
+      return GoogleFonts.katibeh(
+        textStyle: const TextStyle(
+          color: Colors.black,
+          fontSize: 30,
+        ),
+      );
+    }
+
     return ListView.builder(
       itemCount: profYears.length * profBranches.length,
       itemBuilder: (BuildContext context, int index) {
@@ -126,8 +155,10 @@ class ClassesList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Year: ${profYears[yearIndex]}, Branch: ${profBranches[branchIndex]}',
-              style: TextStyle(fontWeight: FontWeight.bold),
+                'Year: ${profYears[yearIndex]}, Branch: ${profBranches[branchIndex]}',
+                style: _getTextStyle2()),
+            const SizedBox(
+              height: 50,
             ),
             ListView.builder(
               shrinkWrap: true,
@@ -137,15 +168,22 @@ class ClassesList extends StatelessWidget {
                 final _class = classes[index];
                 final isSelected = selectedClasses.contains(_class);
 
-                return GestureDetector(
-                  onTap: () => onSave(_class),
-                  child: Container(
-                    height: 40,
-                    width: 80,
-                    color: isSelected ? Colors.blue : null,
-                    child: Center(child: Text(_class)),
-                  ),
-                );
+                return ElevatedButton(
+                    onPressed: () => onSave(_class),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 40,
+                      ),
+                      foregroundColor: isSelected ? Colors.white : Colors.black,
+                      backgroundColor: isSelected
+                          ? Color.fromARGB(255, 31, 1, 61)
+                          : Color.fromARGB(255, 132, 188, 234),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                    ),
+                    child: Text(_class));
               },
             ),
           ],

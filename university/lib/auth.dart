@@ -9,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:university/professor/prof_intro1.dart';
+import 'package:university/student/stud_intro1.dart';
 import '../animatedboxes/neubox3.dart';
 
 final _firebase = FirebaseAuth.instance;
@@ -76,7 +78,9 @@ class _AuthScreenState extends State<AuthScreen> {
   String? userProfilePic;
   // ignore: non_constant_identifier_names
   String? user_email;
-  String selectedOption = 'Choose your role';
+  String selectedOption =
+      'I am a Professor'; // Set initial value to match one of the items
+
   String? newValue;
 
   Color color = Colors.white;
@@ -279,16 +283,17 @@ class _AuthScreenState extends State<AuthScreen> {
               .child('profile')
               .child('$email.jpg');
 
-          await FirebaseFirestore.instance
-              .collection('User')
-              .doc(email)
-              .set({'email': email, 'username': entered_user, 'professor':true});
+          await FirebaseFirestore.instance.collection('User').doc(email).set(
+              {'email': email, 'username': entered_user, 'professor': true});
 
           final uploadTask = userImages.putFile(user_image_file!);
 
           await uploadTask.whenComplete(() async {
             // ignore: unused_local_variable
             final userImgUrl = await userImages.getDownloadURL();
+            Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const Prof_Intro1()),
+          );
           });
         } else {
           final userImages = FirebaseStorage.instance
@@ -298,16 +303,18 @@ class _AuthScreenState extends State<AuthScreen> {
               .child('profile')
               .child('$email.jpg');
 
-          await FirebaseFirestore.instance
-              .collection('User')
-              .doc(email)
-              .set({'email': email, 'username': entered_user, 'professor':false});
+          await FirebaseFirestore.instance.collection('User').doc(email).set(
+              {'email': email, 'username': entered_user, 'professor': false});
 
           final uploadTask = userImages.putFile(user_image_file!);
 
           await uploadTask.whenComplete(() async {
             // ignore: unused_local_variable
             final userImgUrl = await userImages.getDownloadURL();
+
+            Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const Student_Intro1()),
+          );
           });
         }
       }
@@ -503,23 +510,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                     entered_user = newValue!;
                                   },
                                 ),
-                              DropdownButton<String>(
-                                value: selectedOption,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedOption = newValue!;
-                                  });
-                                },
-                                items: <String>[
-                                  'I am a Professor',
-                                  'I am a Student'
-                                ].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              ),
                               SizedBox(
                                 height: isSmallScreen ? 3 : 5,
                               ),
@@ -557,7 +547,32 @@ class _AuthScreenState extends State<AuthScreen> {
                                 onSaved: (newValue) {
                                   entered_pass = newValue!;
                                 },
-                              )
+                              ),
+                              SizedBox(
+                                height: isSmallScreen ? 3 : 5,
+                              ),
+                              if (!_isLogin)
+                                DropdownButtonFormField(
+                                  value: selectedOption,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedOption = newValue!;
+                                    });
+                                  },
+                                  items: <String>[
+                                    'I am a Professor',
+                                    'I am a Student'
+                                  ].map<DropdownMenuItem<String>>(
+                                      (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                        style: namestyle5(),
+                                      ),
+                                    );
+                                  }).toList(),
+                                ),
                             ],
                           ),
                         ),

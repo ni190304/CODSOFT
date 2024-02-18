@@ -13,8 +13,7 @@ class _Professor_ScreenState extends State<Professor_Screen> {
   late SharedPreferences _prefs;
   List<String> _selectedBranches = [];
   List<String> _selectedYears = [];
-  List<String> _selectedSubjects = [];
-  List<String> _selectedClasses = [];
+  String _selectedSubjects = '';
   String? email;
 
   @override
@@ -23,8 +22,7 @@ class _Professor_ScreenState extends State<Professor_Screen> {
     email = FirebaseAuth.instance.currentUser!.email;
     _getProfYears(email!);
     _getProfBranches(email!);
-    _getProfSubjects(email!);
-    _getProfClasses(email!);
+    _getProfClassSubjects(email!);
   }
 
   Future<void> _getProfYears(String user_email) async {
@@ -43,19 +41,11 @@ class _Professor_ScreenState extends State<Professor_Screen> {
     });
   }
 
-  Future<void> _getProfSubjects(String user_email) async {
+  Future<void> _getProfClassSubjects(String user_email) async {
     _prefs = await SharedPreferences.getInstance();
     setState(() {
       _selectedSubjects =
-          _prefs.getStringList('prof${user_email}selectedSubjects') ?? [];
-    });
-  }
-
-  Future<void> _getProfClasses(String user_email) async {
-    _prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _selectedClasses =
-          _prefs.getStringList('prof${user_email}selectedClasses') ?? [];
+          _prefs.getString('prof${user_email}selectedSubjects') ?? '';
     });
   }
 

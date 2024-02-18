@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:university/animatedboxes/splash.dart';
 import 'package:university/auth.dart';
 import 'package:university/professor/prof_intro1.dart';
@@ -20,9 +18,13 @@ class Start extends StatefulWidget {
 class _StartState extends State<Start> {
   @override
   void initState() {
-    final email = FirebaseAuth.instance.currentUser!.email;
-    isProfessor(email!);
     super.initState();
+    // Check if currentUser is not null before accessing its email
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      final email = currentUser.email;
+      isProfessor(email!);
+    }
   }
 
   bool? isProf;
@@ -34,7 +36,12 @@ class _StartState extends State<Start> {
         .get();
 
     setState(() {
-      isProf = status['professor'];
+      if (status['professor'] == true) {
+        isProf = true;
+      }
+      else{
+        isProf = false;
+      }
     });
   }
 
@@ -55,58 +62,50 @@ class _StartState extends State<Start> {
               final email = FirebaseAuth.instance.currentUser!.email;
               return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
                   stream: FirebaseFirestore.instance
-                      .collection('User')
+                      .collection('Professor')
                       .doc(email)
                       .snapshots(),
-                  builder: (context, usersnapshot) {
+                  builder: (context, profsnapshot) {
                     return StreamBuilder<
                             DocumentSnapshot<Map<String, dynamic>>>(
                         stream: FirebaseFirestore.instance
-                            .collection('Professor')
+                            .collection('Student')
                             .doc(email)
                             .snapshots(),
-                        builder: (context, profsnapshot) {
-                          return StreamBuilder<
-                                  DocumentSnapshot<Map<String, dynamic>>>(
-                              stream: FirebaseFirestore.instance
-                                  .collection('Student')
-                                  .doc(email)
-                                  .snapshots(),
-                              builder: (context, studsnapshot) {
-                                if (authsnapshot.connectionState ==
-                                        ConnectionState.waiting ||
-                                    studsnapshot.connectionState ==
-                                        ConnectionState.waiting ||
-                                    profsnapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                  return const Splash();
-                                }
+                        builder: (context, studsnapshot) {
+                          if (authsnapshot.connectionState ==
+                                  ConnectionState.waiting ||
+                              studsnapshot.connectionState ==
+                                  ConnectionState.waiting ||
+                              profsnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                            return const Splash();
+                          }
 
-                                if (authsnapshot.connectionState ==
-                                    ConnectionState.active) {
-                                  if (authsnapshot.hasData) {
-                                    if (profsnapshot.connectionState ==
-                                            ConnectionState.active &&
-                                        profsnapshot.hasData &&
-                                        profsnapshot.data!.exists) {
-                                      return const Professor_Screen();
-                                    } else if (studsnapshot.connectionState ==
-                                            ConnectionState.active &&
-                                        studsnapshot.hasData &&
-                                        studsnapshot.data!.exists) {
-                                      return const Student_Screen();
-                                    } else if (isProf == true) {
-                                      return const Prof_Intro1();
-                                    } else {
-                                      return const Student_Intro1();
-                                    }
-                                  } else {
-                                    return const AuthScreen();
-                                  }
-                                }
+                          if (authsnapshot.connectionState ==
+                              ConnectionState.active) {
+                            if (authsnapshot.hasData) {
+                              if (profsnapshot.connectionState ==
+                                      ConnectionState.active &&
+                                  profsnapshot.hasData &&
+                                  profsnapshot.data!.exists) {
+                                return const Professor_Screen();
+                              } else if (studsnapshot.connectionState ==
+                                      ConnectionState.active &&
+                                  studsnapshot.hasData &&
+                                  studsnapshot.data!.exists) {
+                                return const Student_Screen();
+                              } else if (isProf == true) {
+                                return const Prof_Intro1();
+                              } else {
+                                return const Student_Intro1();
+                              }
+                            } else {
+                              return const AuthScreen();
+                            }
+                          }
 
-                                return const Splash();
-                              });
+                          return const Splash();
                         });
                   });
             } else {
