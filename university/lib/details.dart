@@ -588,3 +588,23 @@ List<Map<String, dynamic>> classinfo = [
     ]
   },
 ];
+
+List<Map<String, dynamic>> subjInfo = [
+  {
+    'class': 'F.E 1',
+    'subjects': [
+      'hello',
+      'hhdh',
+      'hgdjs'
+    ]
+  },
+  {
+    'class': 'F.E 1',
+    'subjects': [
+      'hello',
+      'hhdh',
+      'hgdjs'
+    ]
+  },
+
+];
