@@ -33,12 +33,12 @@ List<Map<String, dynamic>> classinfo = [
         ]
       },
       {
-        'branch': 'MECH.',
+        'branch': 'MECH',
         'classes': [
-          'F.E.MECH. I',
-          'F.E.MECH. II',
-          'F.E.MECH. III',
-          'F.E.MECH. IV'
+          'F.E.MECH I',
+          'F.E.MECH II',
+          'F.E.MECH III',
+          'F.E.MECH IV'
         ],
         'subjects': [
           'Mathematics',
@@ -53,12 +53,12 @@ List<Map<String, dynamic>> classinfo = [
         ]
       },
       {
-        'branch': 'INSTRU.',
+        'branch': 'INSTRU',
         'classes': [
-          'F.E.INSTRU. I',
-          'F.E.INSTRU. II',
-          'F.E.INSTRU. III',
-          'F.E.INSTRU. IV'
+          'F.E.INSTRU I',
+          'F.E.INSTRU II',
+          'F.E.INSTRU III',
+          'F.E.INSTRU IV'
         ],
         'subjects': [
           'Mathematics',
@@ -180,12 +180,12 @@ List<Map<String, dynamic>> classinfo = [
         ]
       },
       {
-        'branch': 'MECH.',
+        'branch': 'MECH',
         'classes': [
-          'S.E.MECH. I',
-          'S.E.MECH. II',
-          'S.E.MECH. III',
-          'S.E.MECH. IV'
+          'S.E.MECH I',
+          'S.E.MECH II',
+          'S.E.MECH III',
+          'S.E.MECH IV'
         ],
         'subjects': [
           "Thermodynamics",
@@ -201,12 +201,12 @@ List<Map<String, dynamic>> classinfo = [
         ]
       },
       {
-        'branch': 'INSTRU.',
+        'branch': 'INSTRU',
         'classes': [
-          'S.E.INSTRU. I',
-          'S.E.INSTRU. II',
-          'S.E.INSTRU. III',
-          'S.E.INSTRU. IV'
+          'S.E.INSTRU I',
+          'S.E.INSTRU II',
+          'S.E.INSTRU III',
+          'S.E.INSTRU IV'
         ],
         'subjects': [
           "Electronic Devices and Circuits",
@@ -333,12 +333,12 @@ List<Map<String, dynamic>> classinfo = [
         ]
       },
       {
-        'branch': 'MECH.',
+        'branch': 'MECH',
         'classes': [
-          'T.E.MECH. I',
-          'T.E.MECH. II',
-          'T.E.MECH. III',
-          'T.E.MECH. IV'
+          'T.E.MECH I',
+          'T.E.MECH II',
+          'T.E.MECH III',
+          'T.E.MECH IV'
         ],
         'subjects': [
           'Theory of Machines',
@@ -355,12 +355,12 @@ List<Map<String, dynamic>> classinfo = [
         ]
       },
       {
-        'branch': 'INSTRU.',
+        'branch': 'INSTRU',
         'classes': [
-          'T.E.INSTRU. I',
-          'T.E.INSTRU. II',
-          'T.E.INSTRU. III',
-          'T.E.INSTRU. IV'
+          'T.E.INSTRU I',
+          'T.E.INSTRU II',
+          'T.E.INSTRU III',
+          'T.E.INSTRU IV'
         ],
         'subjects': [
           'Process Control Systems',
@@ -479,12 +479,12 @@ List<Map<String, dynamic>> classinfo = [
         ]
       },
       {
-        'branch': 'MECH.',
+        'branch': 'MECH',
         'classes': [
-          'B.E.MECH. I',
-          'B.E.MECH. II',
-          'B.E.MECH. III',
-          'B.E.MECH. IV'
+          'B.E.MECH I',
+          'B.E.MECH II',
+          'B.E.MECH III',
+          'B.E.MECH IV'
         ],
         'subjects': [
           "Advanced Materials and Metallurgy",
@@ -500,12 +500,12 @@ List<Map<String, dynamic>> classinfo = [
         ]
       },
       {
-        'branch': 'INSTRU.',
+        'branch': 'INSTRU',
         'classes': [
-          'B.E.INSTRU. I',
-          'B.E.INSTRU. II',
-          'B.E.INSTRU. III',
-          'B.E.INSTRU. IV'
+          'B.E.INSTRU I',
+          'B.E.INSTRU II',
+          'B.E.INSTRU III',
+          'B.E.INSTRU IV'
         ],
         'subjects': [
           "Industrial Automation and Robotics",

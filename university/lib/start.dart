@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:university/animatedboxes/splash.dart';
 import 'package:university/auth.dart';
 import 'package:university/professor/prof_intro1.dart';
-import 'package:university/professor/prof_scr.dart';
+import 'package:university/professor/screens/prof_scr.dart';
 import 'package:university/student/stud_intro1.dart';
 import 'package:university/student/student_scr.dart';
 
