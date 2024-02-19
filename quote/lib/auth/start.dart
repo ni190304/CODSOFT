@@ -1,5 +1,5 @@
-import '../animatedboxes/splash.dart';
-import 'quote.dart';
+import '../../animatedboxes/splash.dart';
+import '../screens/quote.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'auth.dart';

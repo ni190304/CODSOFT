@@ -14,7 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quote/animatedboxes/neubox3.dart';
 import 'package:quote/animatedboxes/neubox4.dart';
-import 'package:quote/ran_quote.dart';
+import 'package:quote/info/ran_quote.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:provider/provider.dart';

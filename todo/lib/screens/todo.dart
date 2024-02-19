@@ -3,10 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'animatedboxes/neubox2.dart';
-import 'screens/fav.dart';
-import 'screens/home.dart';
-import 'screens/profile.dart';
+import 'package:todo/screens/add_todo.dart';
+import '../animatedboxes/neubox2.dart';
+import 'compl.dart';
+import 'fav.dart';
+import 'home.dart';
+import 'missing.dart';
+import 'profile.dart';
 
 class NoGlowBehavior extends ScrollBehavior {
   @override
@@ -16,23 +19,26 @@ class NoGlowBehavior extends ScrollBehavior {
   }
 }
 
-class Quote extends StatefulWidget {
-  const Quote({Key? key}) : super(key: key);
+class Todo extends StatefulWidget {
+  const Todo({Key? key}) : super(key: key);
 
   @override
-  State<Quote> createState() => _QuoteState();
+  State<Todo> createState() => _TodoState();
 }
 
-class _QuoteState extends State<Quote> {
+class _TodoState extends State<Todo> {
   String? email;
 
   int index = 0;
   final _pageController = PageController();
 
   final _screens = [
-    ScrollConfiguration(behavior: NoGlowBehavior(), child: Home()),
+    ScrollConfiguration(behavior: NoGlowBehavior(), child: const Home()),
+    ScrollConfiguration(behavior: NoGlowBehavior(), child: const Missing()),
+    ScrollConfiguration(behavior: NoGlowBehavior(), child: const Completed()),
     ScrollConfiguration(behavior: NoGlowBehavior(), child: const Favorites()),
-    ScrollConfiguration(behavior: NoGlowBehavior(), child: const Profile_Page()),
+    ScrollConfiguration(
+        behavior: NoGlowBehavior(), child: const Profile_Page()),
   ];
 
   Future<String?>? user_dp_future;
@@ -74,10 +80,18 @@ class _QuoteState extends State<Quote> {
     );
   }
 
+  Stream<QuerySnapshot> getTasksStream(String useremail) {
+    return FirebaseFirestore.instance
+        .collection("Tasks")
+        .doc(useremail)
+        .collection("`Pending%20Tasks`")
+        .snapshots();
+  }
+
   Future<String?> fetchusernames(String eemail) async {
     try {
       DocumentSnapshot snapshot = await FirebaseFirestore.instance
-          .collection('Usernames')
+          .collection('UserInfo')
           .doc(eemail)
           .get();
       final userName = snapshot['username'] as String?;
@@ -89,6 +103,13 @@ class _QuoteState extends State<Quote> {
   }
 
   // ignore: non_constant_identifier_names
+  void add_Todo() {
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => const Add_Todo(),
+    );
+  }
 
   Future<String?> getUserImg() async {
     String imgpath = '$email/profile/$email.jpg';
@@ -115,6 +136,15 @@ class _QuoteState extends State<Quote> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+              onPressed: () => add_Todo(),
+              backgroundColor:
+                  Theme.of(context).colorScheme.onSecondaryContainer,
+              child: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                size: 28,
+              )),
           appBar: AppBar(
             elevation: 0,
             leading: Builder(
@@ -229,6 +259,35 @@ class _QuoteState extends State<Quote> {
                           const SizedBox(
                             height: 4,
                           ),
+                          FutureBuilder<String?>(
+                            future: fetchusernames(email!),
+                            builder: (context, profileUserName) {
+                              if (profileUserName.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const CircularProgressIndicator();
+                              } else if (profileUserName.hasError) {
+                                return Text(
+                                    'Error fetching profile username: ${profileUserName.error}');
+                              } else if (profileUserName.hasData) {
+                                final tt = profileUserName.data;
+                                if (tt != null) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Text(
+                                      tt,
+                                      style: namestyle1(),
+                                    ),
+                                  );
+                                } else {
+                                  return const Text(
+                                      'No profile picture available');
+                                }
+                              } else {
+                                return const Text(
+                                    'No profile picture available');
+                              }
+                            },
+                          ),
                           const SizedBox(
                             height: 10,
                           ),
@@ -238,7 +297,63 @@ class _QuoteState extends State<Quote> {
                     const SizedBox(
                       height: 15,
                     ),
-                    
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => const Home())));
+                      },
+                      title: Text(
+                        'Pending',
+                        style: other(),
+                      ),
+                      leading: const Icon(
+                        Icons.schedule,
+                        size: 26,
+                        color: Colors.orange,
+                      ),
+                      trailing:
+                          const Icon(Icons.arrow_forward_ios_sharp, size: 26),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => const Completed())));
+                      },
+                      title: Text(
+                        'Completed',
+                        style: other(),
+                      ),
+                      leading: const Icon(
+                        Icons.check,
+                        size: 26,
+                        color: Colors.green,
+                      ),
+                      trailing:
+                          const Icon(Icons.arrow_forward_ios_sharp, size: 26),
+                    ),
+                    ListTile(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: ((context) => const Missing())));
+                      },
+                      title: Text(
+                        'Missing',
+                        style: other(),
+                      ),
+                      leading: const Icon(
+                        Icons.close,
+                        size: 26,
+                        color: Colors.red,
+                      ),
+                      trailing:
+                          const Icon(Icons.arrow_forward_ios_sharp, size: 26),
+                    ),
                     ListTile(
                       onTap: () {
                         Navigator.push(
@@ -259,7 +374,7 @@ class _QuoteState extends State<Quote> {
                           const Icon(Icons.arrow_forward_ios_sharp, size: 26),
                     ),
                     const SizedBox(
-                      height: 280,
+                      height: 115,
                     ),
                     ListTile(
                       onTap: () {
@@ -290,49 +405,64 @@ class _QuoteState extends State<Quote> {
             children: _screens,
           ),
           bottomNavigationBar: BottomNavigationBar(
-            onTap: (value) {
-              setState(() {
-                index = value;
-                _pageController.animateToPage(index,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeOut);
-              });
-            },
-            currentIndex: index,
-            selectedItemColor: const Color.fromARGB(255, 93, 27, 3),
-            unselectedItemColor: Colors.black,
-            selectedFontSize: 17,
-            unselectedFontSize: 14,
-            iconSize: 27,
-            items: [
-              BottomNavigationBarItem(
-                icon: Icon(
-                  index == 0 ? Icons.home : Icons.home_outlined,
-                  size: index == 0 ? 32 : 27,
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+              onTap: (value) {
+                setState(() {
+                  index = value;
+                  _pageController.animateToPage(index,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOut);
+                });
+              },
+              currentIndex: index,
+              selectedItemColor: const Color.fromARGB(255, 93, 27, 3),
+              unselectedItemColor: Colors.black,
+              selectedFontSize: 17,
+              unselectedFontSize: 14,
+              iconSize: 27,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    index == 0 ? Icons.home : Icons.home_outlined,
+                    size: index == 0 ? 32 : 27,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  label: index == 0 ? 'Home' : '',
                 ),
-                label: index == 0 ? 'Home' : '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  index == 1 ? Icons.favorite : Icons.favorite_border,
-                  size: index == 1 ? 32 : 27,
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    index == 1 ? Icons.square : Icons.crop_square_outlined,
+                    size: index == 1 ? 32 : 27,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  label: index == 1 ? 'Missing' : '',
                 ),
-                label: index == 1 ? 'Favorites' : '',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(
-                  index == 2
-                      ? Icons.account_circle
-                      : Icons.account_circle_outlined,
-                  size: index == 2 ? 32 : 27,
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    index == 2 ? Icons.check_box : Icons.check,
+                    size: index == 2 ? 32 : 27,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  label: index == 2 ? 'Completed' : '',
                 ),
-                label: index == 2 ? 'Profile' : '',
-              ),
-            ],
-          )),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    index == 3 ? Icons.star : Icons.star_border_outlined,
+                    size: index == 3 ? 32 : 27,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  label: index == 3 ? 'Favorites' : '',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(
+                    index == 4
+                        ? Icons.account_circle
+                        : Icons.account_circle_outlined,
+                    size: index == 4 ? 32 : 27,
+                    color: Theme.of(context).colorScheme.onSecondaryContainer,
+                  ),
+                  label: index == 4 ? 'Profile' : '',
+                ),
+              ])),
     );
   }
 }

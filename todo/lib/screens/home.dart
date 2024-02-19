@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:async/async.dart';
-import 'package:todo/update_todo.dart';
+import 'package:todo/screens/update_todo.dart';
 
 final email = FirebaseAuth.instance.currentUser!.email;
 
@@ -130,7 +130,7 @@ class _HomeState extends State<Home> {
                       child: SizedBox(
                     height: 500,
                     width: 500,
-                    child: Lottie.asset('lib/animations/todo4.json'),
+                    child: Lottie.asset('lib/animations/todo2.json'),
                   ));
                 } else {
                   List<Map<String, dynamic>> tasksList = snapshot.data!.docs

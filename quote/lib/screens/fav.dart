@@ -93,7 +93,7 @@ class _FavoritesState extends State<Favorites> {
                         child: SizedBox(
                       height: 500,
                       width: 500,
-                      child: Lottie.asset('lib/animations/todo4.json'),
+                      child: Lottie.asset('lib/animations/todo.json'),
                     ));
                   } else {
                     List<Map<String, dynamic>> quotesList = snapshot.data!.docs
