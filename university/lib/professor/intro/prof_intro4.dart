@@ -4,9 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:university/start.dart';
+import 'package:university/auth/start.dart';
 
-import '../details.dart';
+import '../../details.dart';
 
 Map<String, List<String>> _classSelectedSubjects = {};
 

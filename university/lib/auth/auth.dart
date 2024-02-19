@@ -9,9 +9,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:university/professor/prof_intro1.dart';
-import 'package:university/student/stud_intro1.dart';
-import '../animatedboxes/neubox3.dart';
+import 'package:university/professor/intro/prof_intro1.dart';
+import 'package:university/student/intro/stud_intro1.dart';
+import '../../animatedboxes/neubox3.dart';
 
 final _firebase = FirebaseAuth.instance;
 

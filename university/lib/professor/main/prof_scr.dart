@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:university/professor/screens/prof_home.dart';
-import 'package:university/professor/screens/prof_profile.dart';
+import 'package:university/professor/main/features/prof_home.dart';
+import 'package:university/professor/main/features/prof_profile.dart';
 
 class Professor_Screen extends StatefulWidget {
   const Professor_Screen({Key? key}) : super(key: key);

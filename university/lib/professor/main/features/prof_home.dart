@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:university/professor/screens/years/prof_by.dart';
-import 'package:university/professor/screens/years/prof_fy.dart';
-import 'package:university/professor/screens/years/prof_sy.dart';
-import 'package:university/professor/screens/years/prof_ty.dart';
+import 'package:university/professor/main/years/prof_by.dart';
+import 'package:university/professor/main/years/prof_fy.dart';
+import 'package:university/professor/main/years/prof_sy.dart';
+import 'package:university/professor/main/years/prof_ty.dart';
 
 class Prof_Home extends StatefulWidget {
   Prof_Home(

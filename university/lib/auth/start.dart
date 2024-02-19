@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:university/animatedboxes/splash.dart';
-import 'package:university/auth.dart';
-import 'package:university/professor/prof_intro1.dart';
-import 'package:university/professor/screens/prof_scr.dart';
-import 'package:university/student/stud_intro1.dart';
-import 'package:university/student/student_scr.dart';
+import 'package:university/auth/auth.dart';
+import 'package:university/professor/intro/prof_intro1.dart';
+import 'package:university/professor/main/prof_scr.dart';
+import 'package:university/student/intro/stud_intro1.dart';
+import 'package:university/student/main/student_scr.dart';
 
 class Start extends StatefulWidget {
   const Start({super.key});

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import '../start.dart';
+import '../auth/start.dart';
 
 class Splash extends StatelessWidget {
   const Splash({Key? key});

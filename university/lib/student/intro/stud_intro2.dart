@@ -2,57 +2,46 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:university/professor/prof_intro2.dart';
-import 'package:university/professor/prof_intro3.dart';
+import 'package:university/student/intro/stud_intro3.dart';
 
-class Prof_Intro2 extends StatefulWidget {
-  const Prof_Intro2({Key? key}) : super(key: key);
+class Student_Intro2 extends StatefulWidget {
+  const Student_Intro2({super.key});
 
   @override
-  State<Prof_Intro2> createState() => _Prof_Intro2State();
+  State<Student_Intro2> createState() => _Student_Intro2State();
 }
 
-class _Prof_Intro2State extends State<Prof_Intro2> {
+class _Student_Intro2State extends State<Student_Intro2> {
   late SharedPreferences _prefs;
-  List<String> _selectedBranches = [];
+  String? _selectedBranch;
   String? email;
 
   @override
   void initState() {
-    super.initState();
     email = FirebaseAuth.instance.currentUser!.email;
+
     SharedPreferences.getInstance().then((prefs) {
       setState(() {
         _prefs = prefs;
       });
     });
+    super.initState();
   }
 
   TextStyle _getTextStyle2() {
     return GoogleFonts.katibeh(
       textStyle: const TextStyle(
         color: Colors.black,
-        fontSize: 37,
+        fontSize: 30,
       ),
     );
   }
 
-  Future<void> _saveSelectedBranches() async {
-    await _prefs.setStringList(
-        'prof${email}selectedBranches', _selectedBranches);
+  Future<void> _saveSelectedBranch(String branch) async {
+    await _prefs.setString('student${email}selectedBranch', branch);
 
     Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const Prof_Intro3()));
-  }
-
-  void _toggleBranch(String branch) {
-    setState(() {
-      if (_selectedBranches.contains(branch)) {
-        _selectedBranches.remove(branch);
-      } else {
-        _selectedBranches.add(branch);
-      }
-    });
+        MaterialPageRoute(builder: (context) => const Student_Intro3()));
   }
 
   @override
@@ -62,8 +51,11 @@ class _Prof_Intro2State extends State<Prof_Intro2> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            SizedBox(
+              height: 30,
+            ),
             Text(
-              'Which branchs do you teach in ?',
+              'Which branch are you pursuing ?',
               style: _getTextStyle2(),
             ),
             const SizedBox(height: 50),
@@ -108,21 +100,6 @@ class _Prof_Intro2State extends State<Prof_Intro2> {
                 ),
               ],
             ),
-            SizedBox(
-              height:65,
-            ),
-            SizedBox(
-              height: 65,
-              width: 220,
-              child: ElevatedButton(
-                onPressed: _saveSelectedBranches,
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white,
-                  backgroundColor: Colors.black
-                ),
-                child: Text('Save and Proceed', style: TextStyle(fontSize: 16),),
-              ),
-            ),
           ],
         ),
       ),
@@ -134,18 +111,14 @@ class _Prof_Intro2State extends State<Prof_Intro2> {
       height: 50,
       width: 150,
       child: ElevatedButton(
-          onPressed: () => _toggleBranch(branch),
+          onPressed: () => _saveSelectedBranch(branch),
           style: ElevatedButton.styleFrom(
             padding: const EdgeInsets.symmetric(
               vertical: 10,
               horizontal: 40,
             ),
-            foregroundColor: _selectedBranches.contains(branch)
-                ? Colors.white
-                : Colors.black,
-            backgroundColor: _selectedBranches.contains(branch)
-                ? Color.fromARGB(255, 31, 1, 61)
-                : Color.fromARGB(255, 132, 188, 234),
+            foregroundColor: Colors.white,
+            backgroundColor: Color.fromARGB(255, 31, 1, 61),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(40),
             ),

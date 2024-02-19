@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:university/details.dart';
 
-import '../start.dart';
+import '../../auth/start.dart';
 
 class Student_Intro3 extends StatefulWidget {
   const Student_Intro3({Key? key}) : super(key: key);

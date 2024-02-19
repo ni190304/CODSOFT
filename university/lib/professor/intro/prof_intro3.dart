@@ -2,9 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:university/professor/prof_intro4.dart';
+import 'package:university/professor/intro/prof_intro4.dart';
 
-import '../details.dart';
+import '../../details.dart';
 
 class Prof_Intro3 extends StatefulWidget {
   const Prof_Intro3({super.key});
