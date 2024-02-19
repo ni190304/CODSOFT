@@ -18,26 +18,39 @@ class _Professor_ScreenState extends State<Professor_Screen> {
   String? _selectedSubjects;
   String? email;
 
+  late PageController _pageController;
+  int currentIndex = 0;
+  List<Widget> screens = [];
+
   @override
   void initState() {
-    _pageController = PageController();
-    currentIndex = 0;
+    super.initState();
     email = FirebaseAuth.instance.currentUser!.email;
+    _pageController = PageController();
     SharedPreferences.getInstance().then((prefs) {
       setState(() {
         _prefs = prefs;
-        _selectedYears = _prefs!.getStringList('prof${email}selectedYears') ?? [];
-        _selectedBranches = _prefs!.getStringList('prof${email}selectedBranches') ?? [];
-        _selectedSubjects = _prefs!.getString('prof${email}selectedSubjects') ?? '';
+        _selectedYears =
+            _prefs!.getStringList('prof${email}selectedYears') ?? [];
+        _selectedBranches =
+            _prefs!.getStringList('prof${email}selectedBranches') ?? [];
+        _selectedSubjects =
+            _prefs!.getString('prof${email}selectedSubjects') ?? '';
+        _initScreens();
       });
     });
-    super.initState();
   }
 
-  late PageController _pageController;
-  int currentIndex = 0;
-
-  late List<Widget> screens;
+  void _initScreens() {
+    screens = [
+      Prof_Home(
+        selectedYears: _selectedYears,
+        selectedBranches: _selectedBranches,
+        selectedSubjects: _selectedSubjects,
+      ),
+      const Prof_Profile(),
+    ];
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -48,15 +61,6 @@ class _Professor_ScreenState extends State<Professor_Screen> {
 
   @override
   Widget build(BuildContext context) {
-    screens = [
-      Prof_Home(
-        selectedYears: _selectedYears,
-        selectedBranches: _selectedBranches,
-        selectedSubjects: _selectedSubjects
-      ),
-      const Prof_Profile(),
-    ];
-
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
