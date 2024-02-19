@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:university/auth/start.dart';
 
-import '../../details.dart';
+import '../../info/details.dart';
 
 Map<String, List<String>> _classSelectedSubjects = {};
 

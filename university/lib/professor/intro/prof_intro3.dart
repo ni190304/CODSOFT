@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:university/professor/intro/prof_intro4.dart';
 
-import '../../details.dart';
+import '../../info/details.dart';
 
 class Prof_Intro3 extends StatefulWidget {
   const Prof_Intro3({super.key});
