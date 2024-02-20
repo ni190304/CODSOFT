@@ -1,12 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:university/info/details.dart';
+import 'package:university/professor/main/features/prof_home.dart';
+import 'package:university/professor/main/features/prof_profile.dart';
+
+import 'features/stud_home.dart';
+import 'features/stud_profile.dart';
 
 class Student_Screen extends StatefulWidget {
-  const Student_Screen({super.key});
+  const Student_Screen({Key? key}) : super(key: key);
 
   @override
   State<Student_Screen> createState() => _Student_ScreenState();
@@ -19,26 +21,35 @@ class _Student_ScreenState extends State<Student_Screen> {
   String? _selectedClass;
   String? email;
 
+  late PageController _pageController;
+  int currentIndex = 0;
+  List<Widget> screens = [];
+
   @override
   void initState() {
     super.initState();
     email = FirebaseAuth.instance.currentUser!.email;
+    _pageController = PageController();
     SharedPreferences.getInstance().then((prefs) {
       setState(() {
         _prefs = prefs;
-        _selectedYear = _prefs!.getString('student${email}selectedYear') ?? '';
+        _selectedYear =
+            _prefs!.getString('student${email}selectedYear') ?? '';
         _selectedBranch =
             _prefs!.getString('student${email}selectedBranch') ?? '';
         _selectedClass =
             _prefs!.getString('student${email}selectedClass') ?? '';
+        _initScreens();
       });
     });
   }
 
-  late PageController _pageController;
-  int currentIndex = 0;
-
-  late List<Widget> screens;
+  void _initScreens() {
+    screens = [
+      Stud_Home(selectedYear: _selectedYear,selectedBranch: _selectedBranch, selectedClass: _selectedClass),
+      const Stud_Profile(),
+    ];
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -49,46 +60,39 @@ class _Student_ScreenState extends State<Student_Screen> {
 
   @override
   Widget build(BuildContext context) {
-    final yearData = classinfo.firstWhere(
-      (year) => year['year'] == _selectedYear,
-      orElse: () => {},
-    );
-
-    final branchData = yearData['branches']
-        .firstWhere((branch) => branch['branch'] == _selectedBranch);
-
-    final List<String> subjects = branchData['subjects'];
-
     return Scaffold(
-      body: Center(
-          child: Column(
+      appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+            },
+            icon: Icon(Icons.logout_outlined)),
+      ),
+      body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          ListView.builder(
-              itemCount: subjects.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text(
-                          subjects[index],
-                          style: const TextStyle(
-                              fontSize: 16, color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              })
+          const Divider(
+            color: Color.fromARGB(255, 227, 223, 223),
+            thickness: 0.9,
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+              child: SafeArea(
+                child: PageView(
+                  controller: _pageController,
+                  children: screens,
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+                ),
+              ),
+            ),
+          ),
         ],
-      )),
+      ),
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.white,
         selectedItemColor: Colors.black,
@@ -104,18 +108,18 @@ class _Student_ScreenState extends State<Student_Screen> {
             label: '',
             activeIcon: Icon(
               Icons.home,
-              size: 29,
+              size: 32,
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.settings,
+              Icons.account_circle_outlined,
               size: 23,
             ),
             label: '',
             activeIcon: Icon(
-              Icons.account_circle_outlined,
-              size: 29,
+              Icons.account_circle,
+              size: 32,
             ),
           ),
         ],
@@ -123,3 +127,4 @@ class _Student_ScreenState extends State<Student_Screen> {
     );
   }
 }
+

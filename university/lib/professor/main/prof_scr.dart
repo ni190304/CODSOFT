@@ -104,23 +104,23 @@ class _Professor_ScreenState extends State<Professor_Screen> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home_outlined,
-              size: 23,
+              size: 25,
             ),
             label: '',
             activeIcon: Icon(
               Icons.home,
-              size: 29,
+              size: 33,
             ),
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.settings,
-              size: 23,
+              Icons.account_circle_outlined,
+              size: 25,
             ),
             label: '',
             activeIcon: Icon(
-              Icons.account_circle_outlined,
-              size: 29,
+              Icons.account_circle,
+              size: 33,
             ),
           ),
         ],
