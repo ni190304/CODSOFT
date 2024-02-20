@@ -15,7 +15,7 @@ class _Prof_Fourth_YearState extends State<Prof_Fourth_Year> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Your Classes'),
+        title: Text('Featured Classes'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),

@@ -14,7 +14,9 @@ class _Prof_First_YearState extends State<Prof_First_Year> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
+      appBar: AppBar(
+        title: Text('Featured Classes'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ListView.builder(
@@ -32,13 +34,12 @@ class _Prof_First_YearState extends State<Prof_First_Year> {
                   child: Card(
                     color: Theme.of(context).colorScheme.primaryContainer,
                     shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(
-                      color: Colors.black,
-                      width: 0.25,
+                      borderRadius: BorderRadius.circular(10),
+                      side: BorderSide(
+                        color: Colors.black,
+                        width: 0.25,
+                      ),
                     ),
-                  ),
-
                     elevation: 10,
                     child: Padding(
                       padding: const EdgeInsets.all(15),
