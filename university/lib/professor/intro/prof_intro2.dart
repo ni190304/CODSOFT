@@ -82,8 +82,8 @@ class _Prof_Intro2State extends State<Prof_Intro2> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildBranchButton('MECH.'),
-                    _buildBranchButton('INSTRU.'),
+                    _buildBranchButton('MECH'),
+                    _buildBranchButton('INSTRU'),
                   ],
                 ),
                 const SizedBox(

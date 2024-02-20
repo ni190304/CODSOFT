@@ -292,8 +292,8 @@ class _AuthScreenState extends State<AuthScreen> {
             // ignore: unused_local_variable
             final userImgUrl = await userImages.getDownloadURL();
             Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const Prof_Intro1()),
-          );
+              MaterialPageRoute(builder: (context) => const Prof_Intro1()),
+            );
           });
         } else {
           final userImages = FirebaseStorage.instance
@@ -313,8 +313,8 @@ class _AuthScreenState extends State<AuthScreen> {
             final userImgUrl = await userImages.getDownloadURL();
 
             Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const Student_Intro1()),
-          );
+              MaterialPageRoute(builder: (context) => const Student_Intro1()),
+            );
           });
         }
       }
@@ -526,8 +526,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                       });
                                     },
                                     child: Icon(visibility_off
-                                        ? Icons.visibility
-                                        : Icons.visibility_off),
+                                        ? Icons.visibility_off
+                                        : Icons.visibility),
                                   ),
                                 ),
                                 validator: (value) {
