@@ -115,47 +115,42 @@ class _Prof_HomeState extends State<Prof_Home> {
           const SizedBox(
             height: 5,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              GNav(
-                backgroundColor: Colors.white,
-                selectedIndex: currentIndex,
-                color: Colors.black,
-                activeColor: Colors.black ,
-                tabBackgroundColor: Theme.of(context).colorScheme.primary,
-                onTabChange: _onTabTapped,
-                gap: yearscreens.length == 4
-                    ? 4
-                    : yearscreens.length == 3
-                        ? 5
-                        : yearscreens.length == 2
-                            ? 7
-                            : 10,
-                padding: const EdgeInsets.all(12),
-                tabs: [
-                  if (yearscreens.any((element) => element is Prof_First_Year))
-                    const GButton(
-                      text: 'First Year',
-                      icon: Icons.star,
-                    ),
-                  if (yearscreens.any((element) => element is Prof_Second_Year))
-                    const GButton(
-                      text: 'Second Year',
-                      icon: Icons.lightbulb_outline,
-                    ),
-                  if (yearscreens.any((element) => element is Prof_Third_Year))
-                    const GButton(
-                      text: 'Third Year',
-                      icon: Icons.explore,
-                    ),
-                  if (yearscreens.any((element) => element is Prof_Fourth_Year))
-                    const GButton(
-                      text: 'Fourth Year',
-                      icon: Icons.school,
-                    ),
-                ],
-              ),
+          GNav(
+            backgroundColor: Colors.white,
+            selectedIndex: currentIndex,
+            color: Colors.black,
+            activeColor: Colors.white ,
+            tabBackgroundColor: Theme.of(context).colorScheme.primary,
+            onTabChange: _onTabTapped,
+            gap: yearscreens.length == 4
+                ? 4
+                : yearscreens.length == 3
+                    ? 5
+                    : yearscreens.length == 2
+                        ? 7
+                        : 10,
+            padding: const EdgeInsets.all(12),
+            tabs: [
+              if (yearscreens.any((element) => element is Prof_First_Year))
+                const GButton(
+                  text: 'First Year',
+                  icon: Icons.star,
+                ),
+              if (yearscreens.any((element) => element is Prof_Second_Year))
+                const GButton(
+                  text: 'Second Year',
+                  icon: Icons.lightbulb_outline,
+                ),
+              if (yearscreens.any((element) => element is Prof_Third_Year))
+                const GButton(
+                  text: 'Third Year',
+                  icon: Icons.explore,
+                ),
+              if (yearscreens.any((element) => element is Prof_Fourth_Year))
+                const GButton(
+                  text: 'Fourth Year',
+                  icon: Icons.school,
+                ),
             ],
           ),
           Expanded(
