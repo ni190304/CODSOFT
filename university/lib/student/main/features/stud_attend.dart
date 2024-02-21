@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class Student_Attendance extends StatefulWidget {
@@ -13,15 +15,36 @@ class Student_Attendance extends StatefulWidget {
 class _Student_AttendanceState extends State<Student_Attendance> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime today = DateTime.now();
-  DateTime _focusedDay = DateTime.now();
   DateTime _firstDay = DateTime(DateTime.now().year, 1, 1);
   DateTime _lastDay = DateTime(DateTime.now().year, 12, 31);
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
+  String? email;
+
+  @override
+  void initState() {
+    email = FirebaseAuth.instance.currentUser!.email;
+    super.initState();
+  }
+
   void _onDaySelected(DateTime day, DateTime focusedDay) {
     setState(() {
-      _focusedDay = day;
+      today = day;
     });
   }
+
+  void _saveDates(List<DateTime> _dates) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    List<String> dateStrings = _dates.map((date) {
+      return '${date.day}/${date.month}/${date.year}';
+    }).toList();
+
+    await prefs.setStringList(
+        '$email/${widget.subject}/marked_dates', dateStrings);
+
+    print(dateStrings);
+  }
+
+  List<DateTime> _marked_dates = [];
 
   @override
   Widget build(BuildContext context) {
@@ -54,38 +77,14 @@ class _Student_AttendanceState extends State<Student_Attendance> {
                   child: TableCalendar(
                     locale: "en_US",
                     firstDay: _firstDay,
-                    focusedDay: _focusedDay,
-                    lastDay: today,
+                    focusedDay: today,
+                    lastDay: _lastDay,
                     headerStyle: const HeaderStyle(
                         formatButtonVisible: false, titleCentered: true),
-                    selectedDayPredicate: (day) => isSameDay(day, _focusedDay),
+                    selectedDayPredicate: (day) => isSameDay(day, today),
                     onDaySelected: _onDaySelected,
                     availableGestures: AvailableGestures.all,
                     calendarFormat: _calendarFormat,
-                    rangeSelectionMode: _rangeSelectionMode,
-                    onPageChanged: (focusedDay) {
-                      setState(() {
-                        _focusedDay = focusedDay;
-                      });
-                    },
-                    onFormatChanged: (format) {
-                      setState(() {
-                        _calendarFormat = format;
-                      });
-                    },
-                    calendarStyle: CalendarStyle(
-                      todayDecoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
-                      ),
-                      selectedDecoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.blueGrey,
-                      ),
-                      todayTextStyle: const TextStyle(color: Colors.white),
-                      selectedTextStyle: const TextStyle(color: Colors.white),
-                    ),
                   ),
                 ),
               ),
@@ -94,26 +93,34 @@ class _Student_AttendanceState extends State<Student_Attendance> {
               ),
               SizedBox(
                 width: 250,
-                height: 75,
+                height: 60,
                 child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                       shadowColor: const Color.fromARGB(255, 171, 233, 173),
                       elevation: 10,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      if (isSameDay(today, DateTime.now())) {
+                        _marked_dates.add(today);
+
+                        _saveDates(_marked_dates);
+                      } else {}
+                    },
                     icon: const Icon(
                       Icons.assignment_turned_in_sharp,
-                      size: 26,
+                      size: 22,
                       color: Color.fromARGB(255, 4, 39, 5),
                     ),
                     label: Text(
-                      'Mark attendance',
+                      isSameDay(today, DateTime.now())
+                          ? 'Mark attendance'
+                          : 'Day Missed',
                       style: TextStyle(
                           color: Theme.of(context)
                               .colorScheme
                               .onSecondaryContainer,
-                          fontSize: 23),
+                          fontSize: 20),
                     )),
               ),
             ],
