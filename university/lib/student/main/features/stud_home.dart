@@ -1,9 +1,8 @@
 import 'dart:convert';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-
+import 'package:university/student/main/features/stud_attend.dart';
 import '../../../info/details.dart';
 
 class Stud_Home extends StatefulWidget {
@@ -104,198 +103,203 @@ class _Stud_HomeState extends State<Stud_Home> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 15),
-                Container(
-                  height: 150,
-                  width: double.infinity,
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(15)),
-                  child: Card(
-                    elevation: 10,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(
-                        color: Colors.transparent,
-                        width: 0.25,
-                      ),
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned.fill(
-                          bottom: 60,
-                          top: 0,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(15),
-                                topRight: Radius.circular(15),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 15, bottom: 15),
-                                  child: Text(
-                                    current_subject,
-                                    style: const TextStyle(
-                                      fontSize: 22,
-                                      color: Colors.white,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                const SizedBox(height: 15),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder:(context) => Student_Attendance(subject: current_subject)));
+                  },
+                  child: Container(
+                    height: 150,
+                    width: double.infinity,
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(15)),
+                    child: Card(
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        side: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.25,
                         ),
-                        Positioned.fill(
-                          top: 75,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .primaryContainer,
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(15),
-                                bottomRight: Radius.circular(15),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            bottom: 60,
+                            top: 0,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSecondaryContainer,
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(15),
+                                  topRight: Radius.circular(15),
+                                ),
                               ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(15),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const SizedBox(height: 10),
-                                      FutureBuilder(
-                                        future: getProfessorsWithEmail(
-                                            widget.selectedClass ?? '',
-                                            current_subject),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return CircularProgressIndicator();
-                                          } else if (snapshot.hasError) {
-                                            return Text(
-                                                'Error: ${snapshot.error}');
-                                          } else if (!snapshot.hasData ||
-                                              snapshot.data!.isEmpty) {
-                                            return Text('No professors found');
-                                          } else {
-                                            List<String> professorEmails =
-                                                snapshot.data!;
-                                            if (professorEmails.isEmpty) {
-                                              return const Padding(
-                                                padding:
-                                                    EdgeInsets.only(bottom: 10),
-                                                child:
-                                                    Text('No professors found'),
-                                              );
-                                            } else {
-                                              String _email =
-                                                  professorEmails[0];
-                                              return FutureBuilder(
-                                                future: getUsername(_email),
-                                                builder: (context, snapshot) {
-                                                  if (snapshot
-                                                          .connectionState ==
-                                                      ConnectionState.waiting) {
-                                                    return CircularProgressIndicator();
-                                                  } else if (snapshot
-                                                      .hasError) {
-                                                    return Text(
-                                                        'Error: ${snapshot.error}');
-                                                  } else {
-                                                    final username =
-                                                        snapshot.data;
-                                                    return Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              bottom: 10),
-                                                      child: Text(
-                                                          "Professor: $username"),
-                                                    );
-                                                  }
-                                                },
-                                              );
-                                            }
-                                          }
-                                        },
-                                      )
-                                    ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, bottom: 15),
+                                    child: Text(
+                                      current_subject,
+                                      style: const TextStyle(
+                                        fontSize: 22,
+                                        color: Colors.white,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        ),
-                        Positioned.fill(
-                          top: 16,
-                          left: 175,
-                          child: Center(
-                            child: FutureBuilder(
-                              future: getProfessorsWithEmail(
-                                  widget.selectedClass ?? '', current_subject),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                                } else if (!snapshot.hasData ||
-                                    snapshot.data!.isEmpty) {
-                                  return CircleAvatar(
-                                    backgroundImage:
-                                        AssetImage('lib/pics/profile.png'),
-                                    radius: 40,
-                                  );
-                                } else {
-                                  List<String> professorEmails = snapshot.data!;
-                                  if (professorEmails.isEmpty) {
+                          Positioned.fill(
+                            top: 75,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryContainer,
+                                borderRadius: const BorderRadius.only(
+                                  bottomLeft: Radius.circular(15),
+                                  bottomRight: Radius.circular(15),
+                                ),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        FutureBuilder(
+                                          future: getProfessorsWithEmail(
+                                              widget.selectedClass ?? '',
+                                              current_subject),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return const CircularProgressIndicator();
+                                            } else if (snapshot.hasError) {
+                                              return Text(
+                                                  'Error: ${snapshot.error}');
+                                            } else if (!snapshot.hasData ||
+                                                snapshot.data!.isEmpty) {
+                                              return const Text('No professors found');
+                                            } else {
+                                              List<String> professorEmails =
+                                                  snapshot.data!;
+                                              if (professorEmails.isEmpty) {
+                                                return const Padding(
+                                                  padding:
+                                                      EdgeInsets.only(bottom: 10),
+                                                  child:
+                                                      Text('No professors found'),
+                                                );
+                                              } else {
+                                                String _email =
+                                                    professorEmails[0];
+                                                return FutureBuilder(
+                                                  future: getUsername(_email),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState.waiting) {
+                                                      return const CircularProgressIndicator();
+                                                    } else if (snapshot
+                                                        .hasError) {
+                                                      return Text(
+                                                          'Error: ${snapshot.error}');
+                                                    } else {
+                                                      final username =
+                                                          snapshot.data;
+                                                      return Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                                bottom: 10),
+                                                        child: Text(
+                                                            "Professor: $username"),
+                                                      );
+                                                    }
+                                                  },
+                                                );
+                                              }
+                                            }
+                                          },
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned.fill(
+                            top: 16,
+                            left: 175,
+                            child: Center(
+                              child: FutureBuilder(
+                                future: getProfessorsWithEmail(
+                                    widget.selectedClass ?? '', current_subject),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
                                     return const CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                        'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fvectors%2Fblank-profile-picture-mystery-man-973460%2F&psig=AOvVaw3GYlVPQbSsDoLaqliJYYr4&ust=1708541893754000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCJDrtLvMuoQDFQAAAAAdAAAAABAE',
-                                      ),
+                                      backgroundImage:
+                                          AssetImage('lib/pics/profile.png'),
                                       radius: 40,
                                     );
                                   } else {
-                                    String _email = professorEmails[0];
-                                    return FutureBuilder(
-                                      future: getUserImg(_email),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.connectionState ==
-                                            ConnectionState.waiting) {
-                                          return CircularProgressIndicator();
-                                        } else if (snapshot.hasError) {
-                                          return Text(
-                                              'Error: ${snapshot.error}');
-                                        } else {
-                                          final imageUrl = snapshot.data;
-                                          return CircleAvatar(
-                                            backgroundImage:
-                                                NetworkImage(imageUrl!),
-                                            radius: 40,
-                                          );
-                                        }
-                                      },
-                                    );
+                                    List<String> professorEmails = snapshot.data!;
+                                    if (professorEmails.isEmpty) {
+                                      return const CircleAvatar(
+                                        backgroundImage: NetworkImage(
+                                          'https://www.google.com/url?sa=i&url=https%3A%2F%2Fpixabay.com%2Fvectors%2Fblank-profile-picture-mystery-man-973460%2F&psig=AOvVaw3GYlVPQbSsDoLaqliJYYr4&ust=1708541893754000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCJDrtLvMuoQDFQAAAAAdAAAAABAE',
+                                        ),
+                                        radius: 40,
+                                      );
+                                    } else {
+                                      String _email = professorEmails[0];
+                                      return FutureBuilder(
+                                        future: getUserImg(_email),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return const CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            final imageUrl = snapshot.data;
+                                            return CircleAvatar(
+                                              backgroundImage:
+                                                  NetworkImage(imageUrl!),
+                                              radius: 40,
+                                            );
+                                          }
+                                        },
+                                      );
+                                    }
                                   }
-                                }
-                              },
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
