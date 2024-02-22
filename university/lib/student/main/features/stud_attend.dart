@@ -2,11 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:university/animatedboxes/neubox4.dart';
 
 class Student_Attendance extends StatefulWidget {
   Student_Attendance({super.key, required this.subject});
 
-  String? subject;
+  final String? subject;
 
   @override
   State<Student_Attendance> createState() => _Student_AttendanceState();
@@ -17,12 +18,15 @@ class _Student_AttendanceState extends State<Student_Attendance> {
   DateTime today = DateTime.now();
   DateTime _firstDay = DateTime(DateTime.now().year, 1, 1);
   DateTime _lastDay = DateTime(DateTime.now().year, 12, 31);
+  DateTime bb = DateTime.now();
   String? email;
+  List<DateTime>? _marked_dates;
 
   @override
   void initState() {
-    email = FirebaseAuth.instance.currentUser!.email;
     super.initState();
+    email = FirebaseAuth.instance.currentUser!.email;
+    _loadDates();
   }
 
   void _onDaySelected(DateTime day, DateTime focusedDay) {
@@ -31,20 +35,36 @@ class _Student_AttendanceState extends State<Student_Attendance> {
     });
   }
 
-  void _saveDates(List<DateTime> _dates) async {
+  Future<void> _loadDates() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? dateStrings =
+        prefs.getStringList('$email/${widget.subject}/d');
 
+    setState(() {
+      _marked_dates = dateStrings?.map((dateString) {
+            List<String> dateComponents = dateString.split('/');
+            int day = int.parse(dateComponents[0]);
+            int month = int.parse(dateComponents[1]);
+            int year = int.parse(dateComponents[2]);
+            return DateTime(year, month, day);
+          }).toList() ??
+          [];
+    });
+
+    print(_marked_dates);
+  }
+
+  Future<void> _saveDates(List<DateTime> _dates) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> dateStrings = _dates.map((date) {
       return '${date.day}/${date.month}/${date.year}';
     }).toList();
+    await prefs.setStringList('$email/${widget.subject}/d', dateStrings);
 
-    await prefs.setStringList(
-        '$email/${widget.subject}/marked_dates', dateStrings);
-
-    print(dateStrings);
+    setState(() {
+      _marked_dates = _dates;
+    });
   }
-
-  List<DateTime> _marked_dates = [];
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +98,7 @@ class _Student_AttendanceState extends State<Student_Attendance> {
                     locale: "en_US",
                     firstDay: _firstDay,
                     focusedDay: today,
-                    lastDay: _lastDay,
+                    lastDay: bb,
                     headerStyle: const HeaderStyle(
                         formatButtonVisible: false, titleCentered: true),
                     selectedDayPredicate: (day) => isSameDay(day, today),
@@ -91,37 +111,75 @@ class _Student_AttendanceState extends State<Student_Attendance> {
               const SizedBox(
                 height: 25,
               ),
+              Neubox4(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Total present: ',
+                      style: TextStyle(fontSize: 24, color: Colors.brown),
+                    ),
+                    SizedBox(width: 20),
+                    Container(
+                      height: 75,
+                      width: 1,
+                      color: Colors.black,
+                    ),
+                    SizedBox(width: 20),
+                    Text(
+                      (_marked_dates != null
+                          ? _marked_dates!.length.toString()
+                          : '0'),
+                      style: TextStyle(fontSize: 27),
+                    ), // Access the data property
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 25,
+              ),
               SizedBox(
                 width: 250,
                 height: 60,
                 child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      shadowColor: const Color.fromARGB(255, 171, 233, 173),
-                      elevation: 10,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    shadowColor: const Color.fromARGB(255, 171, 233, 173),
+                    elevation: 10,
+                  ),
+                  onPressed: () {
+                    if (isSameDay(today, DateTime.now()) &&
+                        !_marked_dates!.contains(today)) {
+                      _marked_dates!.add(today);
+                      _saveDates(_marked_dates!);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Marked your attendance successfully !!!'),
+                          duration:
+                              Duration(seconds: 2),
+                        ),
+                      );
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.assignment_turned_in_sharp,
+                    size: 22,
+                    color: Color.fromARGB(255, 4, 39, 5),
+                  ),
+                  label: Text(
+                    _marked_dates != null && !_marked_dates!.contains(today)
+                        ? 'Mark attendance'
+                        : _marked_dates != null &&
+                                _marked_dates!.contains(today)
+                            ? 'Already marked'
+                            : 'Day Missed',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
+                      fontSize: 20,
                     ),
-                    onPressed: () {
-                      if (isSameDay(today, DateTime.now())) {
-                        _marked_dates.add(today);
-
-                        _saveDates(_marked_dates);
-                      } else {}
-                    },
-                    icon: const Icon(
-                      Icons.assignment_turned_in_sharp,
-                      size: 22,
-                      color: Color.fromARGB(255, 4, 39, 5),
-                    ),
-                    label: Text(
-                      isSameDay(today, DateTime.now())
-                          ? 'Mark attendance'
-                          : 'Day Missed',
-                      style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                          fontSize: 20),
-                    )),
+                  ),
+                ),
               ),
             ],
           ),

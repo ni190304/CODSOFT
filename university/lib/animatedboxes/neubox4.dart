@@ -11,10 +11,10 @@ class Neubox4 extends StatelessWidget {
       child: Center(
         child: child,
       ),
-      height: 125,
+      height: 105,
       width: 300,
       decoration: BoxDecoration(
-        color: Colors.transparent,
+        color: Color.fromARGB(255, 245, 242, 242),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: Colors.black,

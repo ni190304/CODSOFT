@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:university/professor/main/years/stud_display.dart';
 
 class Prof_Fourth_Year extends StatefulWidget {
   const Prof_Fourth_Year({Key? key, required this.byclasses_subj})
@@ -28,46 +29,53 @@ class _Prof_Fourth_YearState extends State<Prof_Fourth_Year> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(height: 15),
-                Container(
-                  height: 150,
-                  width: double.infinity,
-                  child: Card(
-                    color: Theme.of(context).colorScheme.primaryContainer,
-                    shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: BorderSide(
-                      color: Colors.black,
-                      width: 0.25,
-                    ),
-                  ),
-
-                    elevation: 10,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Text(
-                            current_class,
-                            style: TextStyle(fontSize: 22, color: Colors.black),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(height: 10),
-                          Column(
-                            children: subjects
-                                .map((subject) => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 8.0),
-                                      child: Text(
-                                        subject,
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.brown),
-                                      ),
-                                    ))
-                                .toList(),
-                          ),
-                        ],
+                GestureDetector(
+                  onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => Stud_Display(
+                            classes: current_class,
+                          ))),
+                  child: Container(
+                    height: 150,
+                    width: double.infinity,
+                    child: Card(
+                      color: Theme.of(context).colorScheme.primaryContainer,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(
+                          color: Colors.black,
+                          width: 0.25,
+                        ),
+                      ),
+                      elevation: 10,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              current_class,
+                              style:
+                                  TextStyle(fontSize: 22, color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 10),
+                            Column(
+                              children: subjects
+                                  .map((subject) => Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Text(
+                                          subject,
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.brown),
+                                        ),
+                                      ))
+                                  .toList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
