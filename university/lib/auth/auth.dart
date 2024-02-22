@@ -276,6 +276,9 @@ class _AuthScreenState extends State<AuthScreen> {
         final email = FirebaseAuth.instance.currentUser!.email;
 
         if (selectedOption == 'I am a Professor') {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const Prof_Intro1()),
+          );
           final userImages = FirebaseStorage.instance
               .ref()
               .child('Professor')
@@ -291,11 +294,11 @@ class _AuthScreenState extends State<AuthScreen> {
           await uploadTask.whenComplete(() async {
             // ignore: unused_local_variable
             final userImgUrl = await userImages.getDownloadURL();
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const Prof_Intro1()),
-            );
           });
         } else {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const Student_Intro1()),
+          );
           final userImages = FirebaseStorage.instance
               .ref()
               .child('Student')
@@ -311,10 +314,6 @@ class _AuthScreenState extends State<AuthScreen> {
           await uploadTask.whenComplete(() async {
             // ignore: unused_local_variable
             final userImgUrl = await userImages.getDownloadURL();
-
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const Student_Intro1()),
-            );
           });
         }
       }
