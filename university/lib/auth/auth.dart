@@ -420,7 +420,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     bottom: isSmallScreen ? 12.0 : 25.0,
                   ),
                   child: Text(
-                    'TaskTrove',
+                    'University',
                     style: namestyle3(),
                   ),
                 ),
