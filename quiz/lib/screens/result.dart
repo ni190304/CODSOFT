@@ -81,9 +81,11 @@ class _ResultState extends State<Result> {
       marks = _prefs!.getDouble('$email/${widget.top}/eval') ?? 0;
       final double answeredLength = correctly_answered.length.toDouble();
       total_marks = marks! + answeredLength;
-      final_marks = (total_marks! / 2); 
+      final_marks = (total_marks! / 2);
       _prefs!.setDouble('$email/${widget.top}/eval', final_marks!);
     });
+    answered_ques.clear();
+    correctly_answered.clear();
   }
 
   @override
@@ -150,7 +152,6 @@ class _ResultState extends State<Result> {
                 child: OutlinedButton.icon(
                   onPressed: () {
                     saveData();
-
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) {
                       return Questions_Screen(
