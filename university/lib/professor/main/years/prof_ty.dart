@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:university/professor/main/years/stud_display.dart';
+import 'package:university/professor/main/features/stud_display.dart';
 
 class Prof_Third_Year extends StatefulWidget {
   const Prof_Third_Year({Key? key, required this.tyclasses_subj})
