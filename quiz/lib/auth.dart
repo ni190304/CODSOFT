@@ -386,12 +386,11 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               if (_isLogin)
                 Padding(
-                  padding: EdgeInsets.only(
-                    bottom: isSmallScreen ? 12.0 : 25.0,
-                  ),
-                  child: Text(
-                    'TaskTrove',
-                    style: namestyle3(),
+                  padding: const EdgeInsets.only(top: 50.0),
+                  child: Image.asset(
+                    'lib/pics/quiz.png',
+                    width: 325,
+                    height: 400,
                   ),
                 ),
               const SizedBox(

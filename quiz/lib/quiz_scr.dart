@@ -70,15 +70,22 @@ class _Quiz_ScreenState extends State<Quiz_Screen> {
   late PageController _pageController;
   int currentIndex = 0;
   String? email;
-  Future<String>? user_dp_future;
+  Future<String?>? user_dp_future;
+  List<Widget> screens = [];
 
   @override
   void initState() {
-    email = FirebaseAuth.instance.currentUser!.email;
     super.initState();
+    _pageController = PageController(); // Initialize _pageController
+    email = FirebaseAuth.instance.currentUser!.email;
+    getUserImg();
+    initScreens();
+    
   }
 
-  List<Widget> screens = [Home(), Analysis(), Profile()];
+  void initScreens() {
+    screens = [Home(), Analysis(), Profile()];
+  }
 
   void _onTabTapped(int index) {
     setState(() {
@@ -202,7 +209,8 @@ class _Quiz_ScreenState extends State<Quiz_Screen> {
             Padding(
               padding: const EdgeInsets.only(top: 15),
               child: ListTile(
-                leading: const Neubox2(
+                leading:  Neubox2(
+                  col: Theme.of(context).colorScheme.primaryContainer,
                   child: Icon(
                     Icons.clear_outlined,
                     color: Colors.black,
