@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz/info/ques_ans.dart';
-import 'package:quiz/screens/result.dart';
+import 'package:quiz/quiz/result.dart';
 
 import 'answer_button.dart';
 

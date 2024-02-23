@@ -76,11 +76,3 @@ class _StartState extends State<Start> {
     );
   }
 }
-
-// Future<void> isInternetConnected() async {
-  //   var connectivityResult = await (Connectivity().checkConnectivity());
-  //   setState(() {
-  //     isConnected = (connectivityResult == ConnectivityResult.mobile ||
-  //         connectivityResult == ConnectivityResult.wifi);
-  //   });
-  // }

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:quiz/screens/home.dart';
-import 'package:quiz/screens/ques_scr.dart';
-import 'package:quiz/screens/ques_summ.dart';
+import 'package:quiz/quiz/ques_scr.dart';
+import 'package:quiz/quiz/ques_summ.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../info/ques_ans.dart';

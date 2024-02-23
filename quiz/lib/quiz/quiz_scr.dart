@@ -7,7 +7,7 @@ import 'package:quiz/screens/analysis.dart';
 import 'package:quiz/screens/home.dart';
 import 'package:quiz/screens/profile.dart';
 
-import '../../animatedboxes/neubox2.dart';
+import '../../../animatedboxes/neubox2.dart';
 
 TextStyle namestyle1() {
   return GoogleFonts.arya(

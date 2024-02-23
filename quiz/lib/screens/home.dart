@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quiz/animatedboxes/neubox2.dart';
-import 'package:quiz/screens/ques_scr.dart';
+import 'package:quiz/quiz/ques_scr.dart';
 
 import '../info/ques_ans.dart';
 

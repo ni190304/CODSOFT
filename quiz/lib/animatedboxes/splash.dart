@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quiz/start.dart';
+import 'package:quiz/auth/start.dart';
 
 class Splash extends StatelessWidget {
   const Splash({Key? key});
