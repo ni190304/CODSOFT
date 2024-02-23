@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,13 +6,9 @@ import 'package:lottie/lottie.dart';
 import 'package:quiz/screens/home.dart';
 import 'package:quiz/screens/ques_scr.dart';
 import 'package:quiz/screens/ques_summ.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../info/ques_ans.dart';
-
-void refreshBuffer() {
-  answered_ques.clear();
-  correctly_answered.clear();
-}
 
 TextStyle _getTextStyle1() {
   return GoogleFonts.cardo(
@@ -32,27 +29,40 @@ TextStyle _getTextStyle2() {
   );
 }
 
-class Result extends StatelessWidget {
+class Result extends StatefulWidget {
   Result(
       {required this.questions,
       required this.answers,
       super.key,
       required this.ques,
-      required this.ans});
+      required this.ans,
+      required this.top});
 
   List<List<QuizQuestion>> questions;
   List<List<String>> answers;
   List<QuizQuestion> ques;
   List<String> ans;
+  String? top;
+
+  @override
+  State<Result> createState() => _ResultState();
+}
+
+class _ResultState extends State<Result> {
+  SharedPreferences? _prefs;
+  double? marks;
+  double? total_marks;
+  double? final_marks;
+  String? email;
 
   List<Map<String, Object>> getSummaryData() {
     final List<Map<String, Object>> summary = [];
     for (var i = 0; i < answered_ques.length; i++) {
       summary.add({
         'question_index': i,
-        'question': ques[i].text,
+        'question': widget.ques[i].text,
         'user_answered': answered_ques[i],
-        'correct_answer': ans[i],
+        'correct_answer': widget.ans[i],
       });
     }
 
@@ -60,9 +70,26 @@ class Result extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    email = FirebaseAuth.instance.currentUser!.email;
+  }
+
+  void saveData() {
+    SharedPreferences.getInstance().then((prefs) {
+      _prefs = prefs;
+      marks = _prefs!.getDouble('$email/${widget.top}/eval') ?? 0;
+      final double answeredLength = correctly_answered.length.toDouble();
+      total_marks = marks! + answeredLength;
+      final_marks = (total_marks! / 2); 
+      _prefs!.setDouble('$email/${widget.top}/eval', final_marks!);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 228, 221, 21),
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       body: SizedBox(
         width: double.infinity,
         child: Container(
@@ -119,15 +146,17 @@ class Result extends StatelessWidget {
                 height: 15,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 50.0),
+                padding: const EdgeInsets.only(top: 20),
                 child: OutlinedButton.icon(
                   onPressed: () {
-                    refreshBuffer();
+                    saveData();
+
                     Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) {
                       return Questions_Screen(
-                        answers: answers,
-                        questions: questions,
+                        answers: widget.answers,
+                        questions: widget.questions,
+                        top: widget.top,
                       );
                     }));
                   },
@@ -152,35 +181,32 @@ class Result extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 15,
+                height: 10,
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 50.0),
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    refreshBuffer();
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) {
-                      return Home();
-                    }));
-                  },
-                  style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)),
-                      side: const BorderSide(
-                        width: 1.0,
-                        color: Colors.black,
-                      ),
-                      backgroundColor: const Color.fromARGB(255, 29, 3, 3)),
-                  icon: const Icon(Icons.home),
-                  label: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 10.0, right: 10.0, left: 10.0),
-                    child: Text(
-                      'Return to HomePage',
-                      textAlign: TextAlign.center,
-                      style: _getTextStyle2(),
+              OutlinedButton.icon(
+                onPressed: () {
+                  saveData();
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) {
+                    return Home();
+                  }));
+                },
+                style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20)),
+                    side: const BorderSide(
+                      width: 1.0,
+                      color: Colors.black,
                     ),
+                    backgroundColor: const Color.fromARGB(255, 29, 3, 3)),
+                icon: const Icon(Icons.home),
+                label: Padding(
+                  padding:
+                      const EdgeInsets.only(top: 10.0, right: 10.0, left: 10.0),
+                  child: Text(
+                    'Return to HomePage',
+                    textAlign: TextAlign.center,
+                    style: _getTextStyle2(),
                   ),
                 ),
               ),

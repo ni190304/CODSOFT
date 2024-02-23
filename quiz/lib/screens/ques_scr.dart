@@ -17,10 +17,15 @@ TextStyle _getTextStyle2() {
 }
 
 class Questions_Screen extends StatefulWidget {
-  Questions_Screen({super.key, required this.questions, required this.answers});
+  Questions_Screen(
+      {super.key,
+      required this.questions,
+      required this.answers,
+      required this.top});
 
   List<List<QuizQuestion>> questions;
   List<List<String>> answers;
+  String? top;
 
   @override
   State<Questions_Screen> createState() => _Questions_ScreenState();
@@ -49,7 +54,7 @@ class _Questions_ScreenState extends State<Questions_Screen> {
     final current_answer_set = widget.answers[randomIndex];
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(250, 81, 226, 187),
+      backgroundColor: Color.fromARGB(248, 198, 246, 232),
       body: SizedBox(
         width: double.infinity,
         child: Container(
@@ -83,6 +88,7 @@ class _Questions_ScreenState extends State<Questions_Screen> {
                             ans: current_answer_set,
                             answers: widget.answers,
                             questions: widget.questions,
+                            top: widget.top,
                           );
                         }));
                       } else {

@@ -79,58 +79,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
   Color color = Colors.white;
 
-  Future<User?> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleSignInAccount =
-          await GoogleSignIn().signIn();
-
-      if (googleSignInAccount == null) {
-        return null;
-      }
-
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      final UserCredential authResult =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      final User? user = authResult.user;
-
-      userProfilePic = user!.photoURL;
-      user_email = user.email;
-      final em = FirebaseAuth.instance.currentUser!.email;
-
-      if (userProfilePic != null) {
-        final userImagesRef = FirebaseStorage.instance
-            .ref()
-            .child(em!)
-            .child('profile')
-            .child('$em.jpg');
-
-        await userImagesRef.putData(
-            (await NetworkAssetBundle(Uri.parse(userProfilePic!)).load(''))
-                .buffer
-                .asUint8List());
-
-        // Store the download URL in Firestore or wherever you need it
-        // For example, you can update the user's profile with the URL
-        await FirebaseFirestore.instance.collection('Usernames').doc(em).set({
-          'username': user.displayName,
-        });
-      }
-
-      return user;
-    } catch (error) {
-      // ignore: avoid_print
-      print("Error signing in with Google: $error");
-      return null;
-    }
-  }
-
   void pickImagecam() async {
     final userImage = await ImagePicker()
         .pickImage(source: ImageSource.camera, maxWidth: 150, imageQuality: 80);
@@ -389,8 +337,8 @@ class _AuthScreenState extends State<AuthScreen> {
                   padding: const EdgeInsets.only(top: 50.0),
                   child: Image.asset(
                     'lib/pics/quiz.png',
-                    width: 325,
-                    height: 400,
+                    width: 275,
+                    height: 200,
                   ),
                 ),
               const SizedBox(
@@ -571,35 +519,8 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               ),
               SizedBox(
-                height: isSmallScreen ? 90 : 110,
+                height: isSmallScreen ? 50 : 75,
               ),
-              if (_isLogin)
-                GestureDetector(
-                  onTap: () async {
-                    User? user = await signInWithGoogle();
-                    if (user != null) {
-                      // ignore: avoid_print
-                      print("User signed in: ${user.displayName}");
-                    } else {
-                      // ignore: avoid_print
-                      print("Sign-in failed");
-                    }
-                  },
-                  child: Neubox3(
-                      child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Sign in with ',
-                        style: signinnamestyle(),
-                      ),
-                      SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: Image.asset('lib/pics/google.jpg')),
-                    ],
-                  )),
-                ),
               if (!_isAuthenticating && _isLogin)
                 TextButton(
                   onPressed: () {

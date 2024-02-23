@@ -12,12 +12,15 @@ dependencies:
   firebase_auth: ^4.16.0
   firebase_core: ^2.24.2
   firebase_storage: ^11.6.0
+  fl_chart: ^0.62.0
   flutter:
     sdk: flutter
+  
   google_fonts: ^4.0.4
   google_sign_in: ^6.1.6
   image_picker: ^1.0.4
   lottie: ^2.3.2
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:

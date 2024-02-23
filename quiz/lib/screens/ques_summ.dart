@@ -25,7 +25,14 @@ class QuesSumm extends StatelessWidget {
   Widget build(BuildContext context) {
     var j = 0;
 
-    return SizedBox(
+    return Container(
+      padding: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 104, 176, 106),
+        border: Border.all(width: 0.25),
+        borderRadius: BorderRadius.circular(10)
+      ),
+      
       height: 300,
       child: SingleChildScrollView(
         child: Column(
