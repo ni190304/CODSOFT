@@ -84,7 +84,7 @@ class _Student_AttendanceState extends State<Student_Attendance> {
                 ),
               ),
               const SizedBox(
-                height: 30,
+                height: 17,
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -109,7 +109,7 @@ class _Student_AttendanceState extends State<Student_Attendance> {
                 ),
               ),
               const SizedBox(
-                height: 25,
+                height: 10,
               ),
               Neubox4(
                 child: Row(
@@ -136,11 +136,11 @@ class _Student_AttendanceState extends State<Student_Attendance> {
                 ),
               ),
               SizedBox(
-                height: 25,
+                height: 20,
               ),
               SizedBox(
                 width: 250,
-                height: 60,
+                height: 50,
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
