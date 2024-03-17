@@ -10,7 +10,7 @@ import 'package:lottie/lottie.dart';
 import '../animatedboxes/neubox4.dart';
 
 class Intro extends StatefulWidget {
-  const Intro({super.key});
+  const Intro({Key? key}) : super(key: key);
 
   @override
   State<Intro> createState() => _IntroState();

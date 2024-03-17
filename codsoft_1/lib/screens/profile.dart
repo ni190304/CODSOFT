@@ -7,7 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../animatedboxes/neubox2.dart';
 
 class Profile_Page extends StatefulWidget {
-  const Profile_Page({super.key});
+  const Profile_Page({Key? key}) : super(key: key);
 
   @override
   State<Profile_Page> createState() => _Profile_PageState();

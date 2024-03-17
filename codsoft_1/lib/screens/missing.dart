@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 class Missing extends StatefulWidget {
-  const Missing({super.key});
+  const Missing({Key? key}) : super(key: key);
 
   @override
   State<Missing> createState() => _MissingState();

@@ -10,7 +10,7 @@ import 'package:todo/screens/update_todo.dart';
 final email = FirebaseAuth.instance.currentUser!.email;
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  const Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();

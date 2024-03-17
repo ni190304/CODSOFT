@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 class Completed extends StatefulWidget {
-  const Completed({super.key});
+  const Completed({Key? key}) : super(key: key);
 
   @override
   State<Completed> createState() => _CompletedState();
